@@ -1589,7 +1589,8 @@ static UUtBool HandlePriorAction(const ONtInputState *inInput, ONtCharacter *ioC
 static UUtBool HandleStun(const ONtInputState *inInput, ONtCharacter *ioCharacter, ONtActiveCharacter *ioActiveCharacter)
 {
 	UUtBool handled = UUcFalse;
-	const TRtAnimation *animation;
+	TRtAnimType inAnimType = ONcAnimType_Anything;
+	TRtAnimation *animation = ONrCharacter_TryImmediateAnimation(ioCharacter, inAnimType);
 
 	if (ioActiveCharacter->blockStun > 0) {
 		ONrCharacter_FightMode(ioCharacter);
