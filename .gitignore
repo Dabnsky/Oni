@@ -7,11 +7,18 @@
 *.exe
 *.user
 *.suo
+*.json
+*.cmake
+*.vcxproj*
+cmake*.cmake
+*exe.map
+
 
 # Ignore build output dirs
 **/Debug/
 **/Release/
 **_Debug**
+/build
 /OniProj/OniWin32Projs/OniVCProj/OniVCProj___Win32_ShippingVersion
 
 #############################################
