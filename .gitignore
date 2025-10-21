@@ -12,6 +12,18 @@
 *.vcxproj*
 cmake*.cmake
 *exe.map
+*.txt
+*.sln
+*.dat
+cmake*
+CMake*
+.stamp
+*.bik
+*FINAL*
+*.bsl
+*.out
+
+
 
 
 # Ignore build output dirs
