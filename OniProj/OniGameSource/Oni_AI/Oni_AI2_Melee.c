@@ -6437,7 +6437,8 @@ static UUtBool AI2iMelee_Position_Update(ONtCharacter *ioCharacter, AI2tMeleeSta
 {
 	UUtUns16 first_attackframe, last_attackframe;
 	UUtUns32 move_index, state_index, num_transitions, max_frames_to_hit;
-	UUtBool should_abort, delay_transition, localmove_success, found_transition, hit_with_attack;
+	UUtBool should_abort, localmove_success, found_transition, hit_with_attack;
+	UUtBool delay_transition = UUcFalse;
 	float delay_distance, target_dist, endtrans_dist, endtrans_frames, sintheta, costheta, target_closing_vel, jump_dist;
 	M3tVector3D target_dir, target_vel, target_movedelta;
 	TRtAnimState current_animstate, iterate_animstate;

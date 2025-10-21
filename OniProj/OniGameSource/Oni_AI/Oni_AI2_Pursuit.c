@@ -579,6 +579,7 @@ static void AI2iPursuit_GoTo_Update(ONtCharacter *ioCharacter, AI2tPursuitState 
 	M3tPoint3D look_point, look_dir;
 	UUtUns32 current_time;
 	UUtBool finished_goto, have_los, do_scan;
+	do_scan = UUcFalse;
 
 	// while we are going to the location of a contact, our knowledge of it does not
 	// degrade!
