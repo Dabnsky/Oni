@@ -710,7 +710,7 @@ static UUtBool AI2iPursuit_DesirePursuit(ONtCharacter *ioCharacter, AI2tPursuitS
 	M3tPoint3D current_pt;
 	UUtError error;
 	float path_distance;
-	UUtBool pursue;
+	UUtBool pursue = UUcFalse;
 
 	if ((inCheckType != AI2cPursuitCheck_InitialContact) &&
 		(ioPursuitState->target->priority == AI2cContactPriority_Friendly)) {
