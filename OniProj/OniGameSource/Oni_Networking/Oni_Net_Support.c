@@ -607,7 +607,7 @@ ONiNet_Buffer_Init(
 // ----------------------------------------------------------------------
 static UUtUns16
 ONiNet_Generate_Update(
-	ONtCharacter			*inCharacter,
+	ONtActiveCharacter			*inCharacter,
 	ONtNet_UC_Data			*ioPrevUpdate,
 	ONtNet_Update_Character	*outUpdate)
 {

@@ -31,7 +31,6 @@ CMake*
 **/Release/
 **_Debug**
 /build
-/GameDataFolder
 /OniProj/OniWin32Projs/OniVCProj/OniVCProj___Win32_ShippingVersion
 
 #############################################

@@ -1664,7 +1664,7 @@ static UUtBool HandleStun(const ONtInputState *inInput, ONtCharacter *ioCharacte
 			break;
 		}
 
-		if (NULL != animation) {
+		if (NULL != animation) {  //The animation may not be initialized here. Game crashes here randomly curing combat.
 			handled = UUcTrue;
 		}
 		else {

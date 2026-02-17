@@ -6448,6 +6448,7 @@ static UUtBool AI2iMelee_Position_Update(ONtCharacter *ioCharacter, AI2tMeleeSta
 	AI2tMeleeProfile *profile = ioCharacter->ai2State.meleeProfile;
 	TRtAnimIntersectContext anim_context;
 	ONtActiveCharacter *active_character = ONrGetActiveCharacter(ioCharacter);
+	
 #if DEBUG_VERBOSE_POSITION
 	AI2tMeleeMoveState orig_state;
 #endif
