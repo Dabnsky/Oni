@@ -37,6 +37,8 @@
 #include "Oni_ImpactEffect.h"
 #include "Oni_OutGameUI.h"
 
+#include "Oni_Win_Multiplayer.h"
+
 // ======================================================================
 // defines
 // ======================================================================
@@ -617,10 +619,46 @@ OWiOniWindow_HandleMenuInit(
 	menu = (WMtMenu*)inParam1;
 	if (menu == NULL) { return; }
 
+	// is theis the pulldown menu bar at the top of the game? 
 	switch (UUmHighWord(inParam2))
 	{
 		case OWcMenu_Game:
 			WMrMenu_EnableItem(menu, OWcMenu_Game_Resume, (ONrLevel_GetCurrentLevel() != 0));
+
+		
+		case OWcMenu_Game_MP_Host:
+			WMrMenu_EnableItem(menu, OWcMenu_Game_MP_Host, (ONrLevel_GetCurrentLevel() == 0));
+			// handle host logic
+			// call the appropriate dialog or function from Oni_Win_Multiplayer.c (e.g., show the host dialog, or call a function to start hosting).
+			WMrDialog_ModalBegin(
+				OWcDialog_MPHost,
+				NULL,
+				OWrMPHost_Callback,
+				(UUtUns32) -1,
+				NULL);
+
+			break;
+
+		case OWcMenu_Game_MP_Join:
+			WMrMenu_EnableItem(menu, OWcMenu_Game_MP_Join, (ONrLevel_GetCurrentLevel() == 0));
+			
+			// call the appropriate dialog or function from Oni_Win_Multiplayer.c (e.g., show the join dialog, or call a function to start joining).
+			WMrDialog_ModalBegin(
+				OWcDialog_MPJoin,
+				NULL,
+				OWrMPJoin_Callback,
+				(UUtUns32) -1,
+				NULL);
+			break;
+
+			
+			// WMrMenu_enableItem() what does this do exactly? can I do OWcMenu_Game_MP_Join(menu, OWcMenu_MPJoin_Enable) here?
+				// WMrMenu_EnableItem(menu, OWcMenu_Game_MP_Join, OWcMenu_MPJoin_Enable);
+				// WMrMenu_EnableItem(menu, OWcMenu_Game_MP_Host, OWcMenu_MPHost_Enable);
+
+				// this is probably not the correct place to simply have menu buttons show up. but i'm intermpreting 'EnableItem' this way.
+			
+
 		break;
 
 		case OWcMenu_Settings:
@@ -737,7 +775,7 @@ OWiOniWindow_HandleMenuCommand(
 #if TOOL_VERSION
 		// ------------------------------
 		case OWcMenu_Settings:
-			switch (menu_item_id)
+			switch (menu_item_id) // the menu item id includes OWcMenu_Game_MP_Host, but there doesn't seem to be by a way to use it currently.
 			{
 				case OWcMenu_Settings_Player:
 					error =
