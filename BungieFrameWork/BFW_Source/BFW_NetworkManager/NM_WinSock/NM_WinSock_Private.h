@@ -7,6 +7,11 @@
 // ======================================================================
 // includes
 // ======================================================================
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_    // Prevent inclusion of winsock.h by windows.h
+#endif
+
 #include <WinSock2.h>
 #include "NM_Queues.h"
 

@@ -5,10 +5,16 @@
 // ======================================================================
 // includes
 // ======================================================================
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_    // Prevent inclusion of winsock.h by windows.h
+#endif
+
+#include <Winsock2.h>
 #include "BFW_NetworkManager.h"
 #include "NM_WinSock.h"
 #include "NM_WinSock_Private.h"
-#include <Winsock2.h>
+
 
 #include "BFW_Console.h"
 

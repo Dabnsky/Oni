@@ -1,9 +1,14 @@
 // ======================================================================
 // Motoko_Platform_Win32.h
 // ======================================================================
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
 #ifndef MOTOKO_PLATFORM_WIN32_H
 #define MOTOKO_PLATFORM_WIN32_H
 
+
+#include <Winsock2.h>
 #include <windows.h>
 
 // ======================================================================

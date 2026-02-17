@@ -13,11 +13,17 @@
 // ======================================================================
 // includes
 // ======================================================================
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+
 #include "BFW.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <Winsock2.h>
 #include <windows.h>
 
 #include "BFW_Motoko.h"

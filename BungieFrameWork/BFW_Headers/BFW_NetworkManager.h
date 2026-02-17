@@ -9,6 +9,11 @@
 // ======================================================================
 // includes
 // ======================================================================
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_    // Prevent inclusion of winsock.h by windows.h
+#endif
+
 #include "BFW.h"
 
 #if (UUmPlatform == UUmPlatform_Mac)

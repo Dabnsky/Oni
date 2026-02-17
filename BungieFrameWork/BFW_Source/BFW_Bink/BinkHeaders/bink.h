@@ -1,3 +1,7 @@
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+
 #ifndef BINKH
 #define BINKH
 
@@ -483,6 +487,7 @@ typedef struct BINKBUFFER * HBINKBUFFER;
 #ifdef __RADMACOSX__
 #include <Carbon/Carbon.h>
 #else
+#include <Winsock2.h>
 #include <windows.h>
 #include <palettes.h>
 #include <qdoffscreen.h>

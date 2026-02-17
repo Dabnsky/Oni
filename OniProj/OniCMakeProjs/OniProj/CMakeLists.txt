@@ -27,6 +27,8 @@ set(SOURCE_FILES
         ../../../BungieFrameWork/BFW_Headers/BFW_MathLib.h
         ../../../BungieFrameWork/BFW_Headers/BFW_Motoko.h
         ../../../BungieFrameWork/BFW_Headers/BFW_Noise.h
+        ../../../BungieFrameWork/BFW_Headers/BFW_NetworkManager.h
+
         ../../../BungieFrameWork/BFW_Headers/BFW_Object.h
         ../../../BungieFrameWork/BFW_Headers/BFW_Particle3.h
         ../../../BungieFrameWork/BFW_Headers/BFW_Path.h
@@ -360,6 +362,15 @@ set(SOURCE_FILES
         ../../OniGameSource/Oni_AI/Oni_AStar.c
         ../../OniGameSource/Oni_AI/Oni_AStar.h
 
+        ../../OniGameSource/Oni_BinaryData/Oni_BinaryData.c
+        ../../OniGameSource/Oni_BinaryData/Oni_BinaryData.h
+
+        ../../OniGameSource/Oni_Networking/Oni_Networking.c
+        ../../OniGameSource/Oni_Networking/Oni_Networking.h
+        ../../OniGameSource/Oni_Networking/Oni_Net_Support.c
+        ../../OniGameSource/Oni_Networking/Oni_Net_Support.h
+        ../../OniGameSource/Oni_Networking/Oni_Net_Private.h
+        
         ../../OniGameSource/Oni_Windows/Oni_Win_AI.c
         ../../OniGameSource/Oni_Windows/Oni_Win_Multiplayer.c
         ../../OniGameSource/Oni_Windows/Oni_Win_AI.h

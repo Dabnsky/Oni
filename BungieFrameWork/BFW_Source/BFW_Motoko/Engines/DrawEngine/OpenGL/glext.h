@@ -6,6 +6,10 @@
 	this is based on the glext.h that comes with nVidia's online demos
 */
 
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+
 #ifndef __glext_h_
 #define __glext_h_
 
@@ -44,6 +48,7 @@ extern "C" {
 
 #if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__)
 #define WIN32_LEAN_AND_MEAN 1
+#include <Winsock2.h>
 #include <windows.h>
 #endif
 

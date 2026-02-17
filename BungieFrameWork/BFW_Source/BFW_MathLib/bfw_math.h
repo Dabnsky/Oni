@@ -5,6 +5,10 @@
 */
 
 // define USE_FAST_MATH in the project if you want to use the fast math code
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+
 #ifndef USE_FAST_MATH
 
 #include <math.h>
@@ -22,6 +26,8 @@
 
 #ifdef _WINDOWS_
 
+
+#include <Winsock2.h>
 #include <windows.h>
 #include "amdmath_dll.h"
 #include <d3d.h>

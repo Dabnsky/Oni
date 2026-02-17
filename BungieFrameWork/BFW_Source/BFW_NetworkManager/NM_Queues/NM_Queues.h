@@ -4,17 +4,23 @@
 #ifndef NM_QUEUES_H
 #define NM_QUEUES_H
 
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_    // Prevent inclusion of winsock.h by windows.h
+
 // ======================================================================
 // includes
 // ======================================================================
 #include "BFW.h"
 #include "BFW_NetworkManager.h"
 
+#endif
+
 #if (UUmPlatform == UUmPlatform_Mac)
 	#include <OpenTransport.h>
 	#include <OpenTptInternet.h>
 #elif (UUmPlatform == UUmPlatform_Win32)
-	#include <WinSock.h>
+	#include <winsock2.h>
 #else
 	#error unknown platform
 #endif

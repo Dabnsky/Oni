@@ -11,6 +11,11 @@
 	Copyright 1997, 2000
 
 */
+
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+
 #ifndef BFW_H
 #define BFW_H
 
@@ -230,6 +235,7 @@ extern "C" {
 		#include <SDL2/SDL_platform.h>
 	#elif UUmPlatform == UUmPlatform_Win32
 		#if UUmCompiler	!= UUmCompiler_MWerks
+			#include <Winsock2.h>
 			#include <windows.h>
 		#endif
 

@@ -4,6 +4,10 @@
 	Stefan
 */
 
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+
 #ifdef USE_FAST_MATH
 
 /*---------- headers */
@@ -11,6 +15,7 @@
 #include "bfw_math.h"
 
 #ifdef _WINDOWS_
+#include <Winsock2.h>
 #include <windows.h>
 // already included #include <xmmintrin.h> // SIMD
 #include <amath.h> // 3DNow!

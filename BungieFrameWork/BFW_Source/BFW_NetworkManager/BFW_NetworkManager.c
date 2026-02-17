@@ -5,8 +5,7 @@
 // ======================================================================
 // includes
 // ======================================================================
-#include "BFW.h"
-#include "BFW_NetworkManager.h"
+
 #if (UUmPlatform == UUmPlatform_Mac)
 	#include "NM_OpenTransport.h"
 #elif (UUmPlatform == UUmPlatform_Win32)
@@ -14,6 +13,9 @@
 #else
 	#error unknown platform
 #endif
+
+#include "BFW.h"
+#include "BFW_NetworkManager.h"
 
 // ======================================================================
 // globals
