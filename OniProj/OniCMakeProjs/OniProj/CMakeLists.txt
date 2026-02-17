@@ -361,6 +361,7 @@ set(SOURCE_FILES
         ../../OniGameSource/Oni_AI/Oni_AStar.h
 
         ../../OniGameSource/Oni_Windows/Oni_Win_AI.c
+        ../../OniGameSource/Oni_Windows/Oni_Win_Multiplayer.c
         ../../OniGameSource/Oni_Windows/Oni_Win_AI.h
         ../../OniGameSource/Oni_Windows/Oni_Win_AI_Character.c
         ../../OniGameSource/Oni_Windows/Oni_Win_AI_Combat.c
