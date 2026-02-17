@@ -31,6 +31,12 @@
 /win32/*/Debug/
 /win32/*/Release/
 
+# misc. runtime files
+*log.txt
+debugger.txt
+persist.dat
+startup.txt
+
 # CMake and Visual Studio files
 *.vcxproj
 *.vcxproj.filters
@@ -39,6 +45,8 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 .cmake/
+.vscode/settings.json
+.vscode/launch.json
 
 #############################################
 # Misc IDE Directories
@@ -58,7 +66,3 @@ cmake_install.cmake
 /OniProj/OniCMakeProjs/TEVCProj/templateSwapCodes.txt
 /OniProj/OniCMakeProjs/TEVCProj/templatechangelog.txt
 /OniProj/OniCMakeProjs/TEVCProj/templatechecksum.c
-
-# vscode custom settings
-.vscode/settings.json
-.vscode/launch.json
