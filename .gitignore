@@ -20,6 +20,26 @@
 /build/vs2022_x86/
 /cmake-build-debug/
 
+# Ignore original game data
+/GameDataFolder/
+
+# General build output
+/build/
+/Bin/
+/win32/Debug/
+/win32/Release/
+/win32/*/Debug/
+/win32/*/Release/
+
+# CMake and Visual Studio files
+*.vcxproj
+*.vcxproj.filters
+*.sln
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+.cmake/
+
 #############################################
 # Misc IDE Directories
 /.idea
@@ -39,3 +59,6 @@
 /OniProj/OniCMakeProjs/TEVCProj/templatechangelog.txt
 /OniProj/OniCMakeProjs/TEVCProj/templatechecksum.c
 
+# vscode custom settings
+.vscode/settings.json
+.vscode/launch.json
