@@ -1,12 +1,12 @@
 /*
 	FILE:	Oni_GameState.c
-	
+
 	AUTHOR:	Brent H. Pease, Michael Evans
-	
+
 	CREATED: May 31, 1997
-	
+
 	PURPOSE:
-	
+
 	Copyright 1997-2000
 
 */
@@ -134,7 +134,7 @@ COtStatusLine		script_count_display[2];
 #endif
 
 #if PERFORMANCE_TIMER
-COtStatusLine		perf_overall[14]; 
+COtStatusLine		perf_overall[14];
 #else
 COtStatusLine		game_fps[1];
 COtStatusLine		texture_info[1];
@@ -155,7 +155,7 @@ UUtBool ONgFastLookups = UUcTrue;
 
 BFtFileRef ONgGameDataFolder;
 ONtGameState *ONgGameState = NULL;
-extern ONtLevel *ONgLevel = NULL;
+ONtLevel *ONgLevel = NULL;
 UUtBool					ONgTerminateGame;
 UUtBool					ONgRunMainMenu;
 M3tGeomContext			*ONgGeomContext = NULL;
@@ -212,7 +212,7 @@ typedef enum {
 
 static UUtError ONrGameState_UpdateSoundManager(ONtGameState *ioGameState, UUtUns32 deltaTicks);
 
-static const TRtAnimation *DoTableLookup(const ONtInputState *inInput, ONtCharacter *ioCharacter, 
+static const TRtAnimation *DoTableLookup(const ONtInputState *inInput, ONtCharacter *ioCharacter,
 										 ONtActiveCharacter *ioActiveCharacter, const ONtMoveLookup *table, TRtAnimType *outAnimType);
 static UUtBool DoTableAnimation(const ONtInputState *inInput, ONtCharacter *ioCharacter, ONtActiveCharacter *ioActiveCharacter,
 								const ONtMoveLookup *table, ONtAnimPriority priority, ONtAttackMove attackMove, const TRtAnimation **outAnimation);
@@ -363,14 +363,14 @@ ONrGameState_FarClipPlane_Set(
 	SLtParameter_Actual		*ioReturnValue)
 {
 	ONgMotoko_FarPlane = inParameterList[0].val.f;
-	
+
 	M3rCamera_SetStaticData(
 		ONgActiveCamera,
 		ONgMotoko_FieldOfView,
 		ONcMotoko_AspectRatio,
 		ONcMotoko_NearPlane,
 		ONgMotoko_FarPlane);
-	
+
 	return UUcError_None;
 }
 
@@ -384,9 +384,9 @@ ONrGameState_FieldOfView_Set(
 	SLtParameter_Actual		*ioReturnValue)
 {
 	float new_fov;
-	
+
 	new_fov = inParameterList[0].val.f;
-	
+
 	ONgMotoko_FieldOfView = new_fov * (M3c2Pi / 360.f);
 
 	M3rCamera_SetStaticData(
@@ -395,7 +395,7 @@ ONrGameState_FieldOfView_Set(
 		ONcMotoko_AspectRatio,
 		ONcMotoko_NearPlane,
 		ONgMotoko_FarPlane);
-	
+
 	return UUcError_None;
 }
 
@@ -429,7 +429,7 @@ UUtError ONrGameState_SetupDefaultLighting(void)
 	directionalLightList[0].color.r = 0.7f;
 	directionalLightList[0].color.g = 0.7f;
 	directionalLightList[0].color.b = 0.7f;
-	
+
 	directionalLightList[1].direction.x = 0.5f;
 	directionalLightList[1].direction.y = 0.5f;
 	directionalLightList[1].direction.z = 1.0f;
@@ -437,7 +437,7 @@ UUtError ONrGameState_SetupDefaultLighting(void)
 	directionalLightList[1].color.r = 0.3f;
 	directionalLightList[1].color.g = 0.3f;
 	directionalLightList[1].color.b = 0.3f;
-	
+
 	// data is copied into motoko
 	M3rLightList_Ambient(ambientLight);
 	M3rLightList_Directional(num_directional_lights, directionalLightList);
@@ -456,20 +456,20 @@ static UUtError ONrGameState_CreateAndSetupCamera(void)
 
 	ONgCurrentCamera = 0;
 
-	for(itr = 0; itr < 2; itr++) 
+	for(itr = 0; itr < 2; itr++)
 	{
 		error = M3rCamera_New(&ONgInternalCamera[itr]);
 		UUmError_ReturnOnError(error);
-		
+
 		ONgMotoko_FarPlane = 10000.0f;
-		
+
 		M3rCamera_SetStaticData(
 			ONgInternalCamera[itr],
 			ONgMotoko_FieldOfView,
 			ONcMotoko_AspectRatio,
 			ONcMotoko_NearPlane,
 			ONgMotoko_FarPlane);
-				
+
 		cameraLoc.x = cameraLoc.y = cameraLoc.z = 0.0f;
 		viewDir.x = 1.0f;
 		viewDir.y = 0.0f;
@@ -477,20 +477,20 @@ static UUtError ONrGameState_CreateAndSetupCamera(void)
 		upDir.x = 0.0f;
 		upDir.y = 1.0f;
 		upDir.z = 0.0f;
-		
+
 		M3rCamera_SetViewData(
 			ONgInternalCamera[itr],
 			&cameraLoc,
 			&viewDir,
 			&upDir);
-		
+
 	}
 
 	ONgVisibilityCamera = ONgInternalCamera[0];
 	ONgActiveCamera = ONgInternalCamera[0];
 
 	M3rCamera_SetActive(ONgActiveCamera);
-	
+
 	return UUcError_None;
 }
 
@@ -566,7 +566,7 @@ static void WaitForKey(UUtUns32 inTimeOut)
 		if (KeyWentDown()) {
 			break;
 		}
-				
+
 		if (current_time > end_time) {
 			break;
 		}
@@ -597,7 +597,7 @@ static void splash_screen_internal(M3tTextureMap_Big *splash_screen, float inBla
 	M3rDraw_State_SetInt(M3cDrawStateIntType_ZCompare, M3cDrawState_ZCompare_Off);
 	M3rDraw_State_SetInt(M3cDrawStateIntType_Fog, M3cDrawStateFogDisable);
 	M3rGeom_State_Commit();
-	
+
 	if (NULL != splash_screen) {
 		UUtUns16 x_location = (M3rDraw_GetWidth() - splash_screen->width) / 2;
 		UUtUns16 y_location = (M3rDraw_GetHeight() - splash_screen->height) / 2;
@@ -642,18 +642,18 @@ ONrGameState_SplashScreen(
 	if (NULL == splash_screen) {
 		goto exit;
 	}
-	
+
 	// stop all currently playing sounds
 	if (inStopPlayingSounds)
 	{
 		OSrSetScriptOnly(UUcTrue);
 		SSrStopAll();
 	}
-	
+
 	// start the music
 	OSrMusic_Start(inMusicName, 0.0f);
 	OSrMusic_SetVolume(1.0f, 1.0f);
-	
+
 	// fade in from black
 	start_time = UUrMachineTime_Sixtieths();
 	end_time = start_time + timeout_length;
@@ -679,7 +679,7 @@ ONrGameState_SplashScreen(
 		blanket_amount = get_cosmetic_ramp(1.f - blanket_amount);
 
 		splash_screen_internal(splash_screen, blanket_amount);
-		
+
 		// update the sound
 		SS2rUpdate();
 		ONrGameState_UpdateSoundManager(ONgGameState, 0);
@@ -712,20 +712,20 @@ ONrGameState_SplashScreen(
 fade_out:
 	// stop the music
 	OSrMusic_SetVolume(0.0f, 1.0f);
-	
+
 	// fade out (can skip with a second keypress)
 	start_time = UUrMachineTime_Sixtieths();
 	end_time = start_time + fade_length;
-	
+
 	while(1)
 	{
 		UUtUns32 hasty_time = 30;
 		UUtUns32 current_time = UUrMachineTime_Sixtieths();
 		float blanket_amount = 0.f;
-		
+
 		// update the music
 		SS2rUpdate();
-		
+
 		if (current_time >= end_time) {
 			break;
 		}
@@ -750,7 +750,7 @@ fade_out:
 	}
 
 	OSrMusic_Halt();
-	
+
 	if (ONgGameState->local.in_cutscene) {
 		ONgGameState->local.time_cutscene_started_or_wait_for_key_returned_in_machine_time = UUrMachineTime_Sixtieths();
 	}
@@ -787,7 +787,7 @@ ONrGameState_LevelBegin(UUtUns16 inLevelNumber)
 
 		ONrPersist_SetPlace(&place);
 	}
-	
+
 	ONrUnlockLevel(inLevelNumber);
 
 	UUrMemory_Clear(ONgGameState, sizeof(*ONgGameState));
@@ -799,7 +799,7 @@ ONrGameState_LevelBegin(UUtUns16 inLevelNumber)
 		M3rGeom_Frame_End();
 		WaitForKey(60 * 15);
 	}
-			
+
 	ONgGameState->inputEnable = UUcTrue;
 	ONgGameState->inside_console_action = UUcFalse;
 
@@ -814,7 +814,7 @@ ONrGameState_LevelBegin(UUtUns16 inLevelNumber)
 	ONgGameState->local.cameraPlay = UUcFalse;
 	ONgGameState->local.cameraRecording = NULL;
 	ONgGameState->local.cameraActive = UUcFalse;
-	
+
 	// Set up opacity
 	ONgGameState->displayOpacity = UUcTrue;
 	ONgGameState->geometryOpacity = NULL;
@@ -826,14 +826,14 @@ ONrGameState_LevelBegin(UUtUns16 inLevelNumber)
 
 	ONgGameState->local.slowMotionEnable = UUcFalse;
 	ONgGameState->local.slowMotionTimer = 0;
-	ONgGameState->local.currentPromptMessage = NULL;	
+	ONgGameState->local.currentPromptMessage = NULL;
 
 	// load the level & set the environment
 	error = TMrInstance_GetDataPtr_ByNumber(ONcTemplate_Level, 0, &ONgLevel);
 	UUmError_ReturnOnErrorMsg(error, "could not load level");
 	ONgGameState->level = ONgLevel;
 	AKgEnvironment = ONgGameState->level->environment;
-	
+
 	// Allocate physics contexts
 	error = PHrPhysicsContext_New(ONcMaxPhysics);
 	UUmError_ReturnOnError(error);
@@ -844,17 +844,17 @@ ONrGameState_LevelBegin(UUtUns16 inLevelNumber)
 	UUmError_ReturnOnErrorMsg(error, "could not create and setup UI");	*/
 
 	error = ONrCharacter_LevelBegin();
-	UUmError_ReturnOnErrorMsg(error, "ONrCharacter_LevelBegin failed");	
+	UUmError_ReturnOnErrorMsg(error, "ONrCharacter_LevelBegin failed");
 
 	ONiGameState_Performance_Install();
 
 	// make sure that we have allocated the white texture for the letterbox
 	if (ONgLetterboxTexture == NULL) {
 		IMtPixelType pixelType;
-		
+
 		error = M3rDrawEngine_FindGrayscalePixelType(&pixelType);
 		if (error == UUcError_None) {
-			error = M3rTextureMap_New(4, 4, pixelType, M3cTexture_AllocMemory, 
+			error = M3rTextureMap_New(4, 4, pixelType, M3cTexture_AllocMemory,
 								M3cTextureFlags_None, "white texture", &ONgLetterboxTexture);
 
 			if (error == UUcError_None) {
@@ -870,10 +870,10 @@ ONrGameState_LevelBegin(UUtUns16 inLevelNumber)
 	ONgGameState->local.fadeInfo.active = UUcFalse;
 
 	// FX
-	error = 
+	error =
 		M3rGeomContext_SetEnvironment(
 			ONgGameState->level->environment);
-	UUmError_ReturnOnErrorMsg(error, "could not set environment");	
+	UUmError_ReturnOnErrorMsg(error, "could not set environment");
 
 	COrConsole_StatusLine_LevelBegin();
 	ONrGameState_Timer_LevelBegin();
@@ -974,7 +974,7 @@ static void iWriteScreenToFile(BFtFileRef *inFileRef, UUtUns32 inScaleDown)
 		}
 
 		IMrImage_Scale(IMcScaleMode_Box, width, height, IMcPixelType_RGB888, dst_buffer, scaled_width, scaled_height, dst_buffer_scaled);
-	
+
 		if (NULL != inFileRef) {
 			BFrFile_Delete(inFileRef);
 
@@ -1022,7 +1022,7 @@ static float iGetTurnPerFrame(const ONtInputState *inInput, ONtCharacter *ioChar
 	const float slowTurn = (M3cPi * 1.5f) / 120.f;
 	float turnAmt;
 
-	if (ONrCharacter_IsAI(ioCharacter)) { 
+	if (ONrCharacter_IsAI(ioCharacter)) {
 		turnAmt = aiRunningTurn;
 	}
 	else if (inInput->buttonIsDown & LIc_BitMask_Walk) {
@@ -1105,7 +1105,7 @@ static void HandleTurnInput(const ONtInputState *inInput, float mousex, float mo
 
 
 	// == handle turning if we are in an animation where turning is legal==
-	if (!TRrAnimation_TestFlag(ioActiveCharacter->animation, ONcAnimFlag_NoTurn)) 
+	if (!TRrAnimation_TestFlag(ioActiveCharacter->animation, ONcAnimFlag_NoTurn))
 	{
 		float btnTurnAmt = iGetTurnPerFrame(inInput, ioCharacter);
 
@@ -1204,7 +1204,7 @@ static void HandleTurning(const ONtInputState *inInput, float mousex, float mous
 	else {
 		turn = UUcFalse;
 	}
-	
+
 	if (turn) {
 		UUmAssertTrigRange(ioCharacter->facing);
 
@@ -1238,7 +1238,7 @@ UUtBool ONrGameState_TryActionMarker(ONtCharacter *inCharacter, ONtActionMarker 
 
 	if (inActionMarker == NULL)
 		return UUcFalse;
-	
+
 	// check the character is in a valid animtype to use the console
 	if (!ONrCharacter_CanUseConsole(inCharacter)) {
 		if (ONgDebugConsoleAction) {
@@ -1368,7 +1368,7 @@ static UUtBool HandleStartTauntOrAction(const ONtInputState *inInput, ONtCharact
 		ONrCharacter_ConsoleAction_Update(ioCharacter, ioActiveCharacter);
 		return UUcTrue;
 	}
-	
+
 	// if the action key wasnt pressed, exit...
 	if ((inInput->buttonWentDown & LIc_BitMask_Action) == 0) {
 		return UUcFalse;
@@ -1509,7 +1509,7 @@ static UUtBool HandlePriorAction(const ONtInputState *inInput, ONtCharacter *ioC
 
 		case ONcAnimType_Run_Kick:
 		case ONcAnimType_Run_Punch:
-	
+
 		case ONcAnimType_Run_Back_Punch:
 		case ONcAnimType_Run_Back_Kick:
 
@@ -1849,7 +1849,7 @@ static UUtBool HandleStartSidestep(const ONtInputState *inInput, ONtCharacter *i
 
 		animFound = UUcFalse;
 
-		for(itr = 0; itr < 4; itr++) 
+		for(itr = 0; itr < 4; itr++)
 		{
 			if (ONcAnimType_None != runWalk[itr])
 			{
@@ -1863,7 +1863,7 @@ static UUtBool HandleStartSidestep(const ONtInputState *inInput, ONtCharacter *i
 				}
 
 				// second, try starting to move in this direction
-				switch(runWalk[itr]) 
+				switch(runWalk[itr])
 				{
 					case ONcAnimType_Run:
 						start_type = ONcAnimType_Run_Start;
@@ -1922,7 +1922,7 @@ static UUtBool HandleStartSidestep(const ONtInputState *inInput, ONtCharacter *i
 	if (animFound) {
 		// if we actually ended up finding a forwards or backwards animation, set up
 		// the facing modifier appropriately
-		switch(TRrAnimation_GetType(ioActiveCharacter->animation)) 
+		switch(TRrAnimation_GetType(ioActiveCharacter->animation))
 		{
 			case ONcAnimType_Crouch_Walk:
 			case ONcAnimType_Crouch_Run:
@@ -1959,7 +1959,7 @@ static UUtBool HandleStartRunning(const ONtInputState *inInput, ONtCharacter *io
 		{ 0, LIc_BitMask_Forward | LIc_BitMask_Walk,		ONcAnimType_None,	ONcAnimType_Walk , UUcFalse },
 		{ 0, LIc_BitMask_Backward | LIc_BitMask_Walk,		ONcAnimType_None,	ONcAnimType_Walk_Backwards_Start , UUcFalse },
 		{ 0, LIc_BitMask_Backward | LIc_BitMask_Walk,		ONcAnimType_None,	ONcAnimType_Walk_Backwards , UUcFalse },
-	
+
 		{ 0, LIc_BitMask_Forward,							ONcAnimType_None,	ONcAnimType_Run_Start , UUcFalse },
 		{ 0, LIc_BitMask_Forward,							ONcAnimType_None,	ONcAnimType_Run , UUcFalse },
 		{ 0, LIc_BitMask_Forward,							ONcAnimType_None,	ONcAnimType_Walk_Start , UUcFalse },
@@ -1984,12 +1984,12 @@ static UUtBool HandleStartRunning(const ONtInputState *inInput, ONtCharacter *io
 
 	const ONtMoveLookup crouch_table[] =
 	{
-		{ 0, LIc_BitMask_Crouch | 
+		{ 0, LIc_BitMask_Crouch |
 			LIc_BitMask_Walk | LIc_BitMask_Forward,			ONcAnimType_None, ONcAnimType_Crouch_Walk , UUcFalse },
 		{ 0, LIc_BitMask_Crouch | LIc_BitMask_Forward,		ONcAnimType_None, ONcAnimType_Crouch_Run , UUcFalse },
 		{ 0, LIc_BitMask_Crouch | LIc_BitMask_Forward,		ONcAnimType_None, ONcAnimType_Crouch_Walk , UUcFalse },
 
-		{ 0, LIc_BitMask_Crouch | 
+		{ 0, LIc_BitMask_Crouch |
 			LIc_BitMask_Walk | LIc_BitMask_Backward,		ONcAnimType_None, ONcAnimType_Crouch_Walk_Backwards , UUcFalse },
 		{ 0, LIc_BitMask_Crouch | LIc_BitMask_Backward,		ONcAnimType_None, ONcAnimType_Crouch_Run_Backwards , UUcFalse },
 		{ 0, LIc_BitMask_Crouch | LIc_BitMask_Backward,		ONcAnimType_None, ONcAnimType_Crouch_Walk_Backwards , UUcFalse },
@@ -2030,7 +2030,7 @@ static UUtBool HandleStartRunning(const ONtInputState *inInput, ONtCharacter *io
 		}
 
 		// ok if you are running and sidestepping you get rotation
-		switch(TRrAnimation_GetType(found_anim)) 
+		switch(TRrAnimation_GetType(found_anim))
 		{
 			case ONcAnimType_Walk_Backwards:
 			case ONcAnimType_Walk_Backwards_Start:
@@ -2110,7 +2110,7 @@ static UUtBool HandleStop(const ONtInputState *inInput, ONtCharacter *ioCharacte
 		case ONcAnimType_Walk_Sidestep_Left:
 		case ONcAnimType_Walk_Sidestep_Right:
 
-		case ONcAnimType_Crouch_Run:				
+		case ONcAnimType_Crouch_Run:
 		case ONcAnimType_Crouch_Run_Backwards:
 		case ONcAnimType_Crouch_Run_Sidestep_Left:
 		case ONcAnimType_Crouch_Run_Sidestep_Right:
@@ -2135,7 +2135,7 @@ static UUtBool HandleLeaveStun(const ONtInputState *inInput, ONtCharacter *ioCha
 		{ 0,	LIc_BitMask_Crouch,		ONcAnimType_None,	ONcAnimType_Crouch, UUcFalse },
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Stand, UUcFalse },
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Crouch, UUcFalse },
-		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse }, 
+		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse },
 	};
 
 	switch(ioActiveCharacter->curAnimType)
@@ -2161,13 +2161,13 @@ static UUtBool HandleChangeStance(const ONtInputState *inInput, ONtCharacter *io
 	const ONtMoveLookup crouchTable[] =
 	{
 		{ 0,	LIc_BitMask_Crouch,		ONcAnimType_None,	ONcAnimType_Crouch, UUcFalse },
-		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse }, 
+		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse },
 	};
 
 	const ONtMoveLookup standTable[] =
 	{
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Stand, UUcFalse },
-		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse }, 
+		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse },
 	};
 
 	switch(ioActiveCharacter->nextAnimState)
@@ -2194,7 +2194,7 @@ static UUtBool HandleChangeStance(const ONtInputState *inInput, ONtCharacter *io
 				animFound = DoTableAnimation(inInput, ioCharacter, ioActiveCharacter, standTable, ONcAnimPriority_Appropriate, ONcNormalMove, NULL);
 				if (animFound) { goto exit; }
 			}
-		break;	
+		break;
 	}
 
 exit:
@@ -2214,7 +2214,7 @@ static UUtBool HandleFallThrough(const ONtInputState *inInput, ONtCharacter *ioC
 	{
 		{ 0,	LIc_BitMask_Crouch,		ONcAnimType_None,	ONcAnimType_Crouch, UUcFalse },
 		{ 0,	LIc_BitMask_Crouch,		ONcAnimType_None,	ONcAnimType_Prone, UUcFalse },
-		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None , UUcFalse }, 
+		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None , UUcFalse },
 	};
 
 	const ONtMoveLookup standTable[] =
@@ -2227,7 +2227,7 @@ static UUtBool HandleFallThrough(const ONtInputState *inInput, ONtCharacter *ioC
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Stand, UUcFalse },
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Crouch, UUcFalse },
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Prone, UUcFalse },
-		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse }, 
+		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse },
 	};
 
 	in_bad_varient = ONrCharacter_InBadVarientState(ioCharacter, ioActiveCharacter);
@@ -2270,9 +2270,9 @@ static UUtBool HandleFallThrough(const ONtInputState *inInput, ONtCharacter *ioC
 			goto exit;
 		}
 	}
-	
+
 	// if we are in a jump then the default action is to fly
-	switch(ioActiveCharacter->curAnimType) 
+	switch(ioActiveCharacter->curAnimType)
 	{
 		case ONcAnimType_Fly:
 		case ONcAnimType_Jump:
@@ -2376,7 +2376,7 @@ static UUtBool HandleStandingTurn(const ONtInputState *inInput, ONtCharacter *io
 	const float turnStart = ONgAimingWidth * M3cDegToRad;
 	UUtBool found;
 	const float desire = ONrCharacter_GetDesiredFacingOffset(ioCharacter);
-	float turnPerFrame = iGetTurnPerFrame(inInput, ioCharacter); 
+	float turnPerFrame = iGetTurnPerFrame(inInput, ioCharacter);
 
 	const ONtMoveLookup turn_left_table[] =
 	{
@@ -2418,7 +2418,7 @@ static const TRtAnimation *DoTableLookup(const ONtInputState *inInput, ONtCharac
 	const ONtMoveLookup *curEntry;
 	ONtCharacterClass *characterClass = ioCharacter->characterClass;
 	TRtAnimationCollection *collection = characterClass->animations;
-	
+
 	UUmAssertReadPtr(inInput, sizeof(*inInput));
 	UUmAssertWritePtr(ioCharacter, sizeof(*ioCharacter));
 	UUmAssertReadPtr(table, sizeof(*table));
@@ -2434,7 +2434,7 @@ static const TRtAnimation *DoTableLookup(const ONtInputState *inInput, ONtCharac
 				*outAnimType = curEntry->moveType;
 			}
 
-			return animFound; 
+			return animFound;
 		}
 	}
 
@@ -2452,7 +2452,7 @@ static UUtBool DoTableAnimation(const ONtInputState *inInput, ONtCharacter *ioCh
 	const ONtMoveLookup *curEntry;
 	UUtBool call_fight_mode = ONcAttackMove == attackMove;
 	TRtAnimVarient originalVarient = ioActiveCharacter->animVarient;
-	
+
 	animFound = UUcFalse;
 
 	UUmAssertReadPtr(inInput, sizeof(*inInput));
@@ -2479,7 +2479,7 @@ static UUtBool DoTableAnimation(const ONtInputState *inInput, ONtCharacter *ioCh
 		}
 
 		if (animFound) {
-			break; 
+			break;
 		}
 	}
 
@@ -2490,7 +2490,7 @@ static UUtBool DoTableAnimation(const ONtInputState *inInput, ONtCharacter *ioCh
 	if (call_fight_mode) {
 		if (NULL != animFound) {
 			TRtAnimVarient varient = TRrAnimation_GetVarient(animFound);
-	
+
 			if (varient & ONcAnimVarientMask_Fight) {
 				ONrCharacter_FightMode(ioCharacter);
 			}
@@ -2531,7 +2531,7 @@ static UUtBool HandleStartJumping(const ONtInputState *inInput, ONtCharacter *io
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Jump, UUcFalse },
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse },
 	};
-	
+
 	if (!(inInput->buttonWentDown & LIc_BitMask_Jump))
 	{
 		return UUcFalse;
@@ -2547,7 +2547,7 @@ static UUtBool HandleStartJumping(const ONtInputState *inInput, ONtCharacter *io
 			return UUcFalse;
 		break;
 	}
- 
+
 	ONrCharacter_BuildJump(ioCharacter, ioActiveCharacter);
 
 	animFound = DoTableAnimation(inInput, ioCharacter, ioActiveCharacter, table, ONcAnimPriority_Appropriate, ONcNormalMove, NULL);
@@ -2560,7 +2560,7 @@ static UUtBool HandleStartJumping(const ONtInputState *inInput, ONtCharacter *io
 	return animFound;
 }
 
-static void ONiGameState_FindPickupItems(ONtCharacter *ioCharacter, WPtWeapon **outWeapon, 
+static void ONiGameState_FindPickupItems(ONtCharacter *ioCharacter, WPtWeapon **outWeapon,
 										WPtPowerup **outPowerup, UUtBool *outPowerupInventoryFull)
 {
 	float min_y = ioCharacter->location.y + ONcStartPickupMinY;
@@ -2688,7 +2688,7 @@ static UUtBool HandleStartLanding(const ONtInputState *inInput, ONtCharacter *io
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_Land, UUcFalse },
 		{ 0,	0,						ONcAnimType_None,	ONcAnimType_None, UUcFalse }
 	};
-	
+
 	if (!(ioActiveCharacter->pleaseLand)) {
 		return UUcFalse;
 	}
@@ -2697,7 +2697,7 @@ static UUtBool HandleStartLanding(const ONtInputState *inInput, ONtCharacter *io
 		TRtAnimState old_anim_state = ioActiveCharacter->nextAnimState;
 
 		animFound = DoTableAnimation(inInput, ioCharacter, ioActiveCharacter, land_hard_table, ONcAnimPriority_Force, ONcNormalMove, NULL);
-		
+
 		if (!animFound) {
 			ioActiveCharacter->nextAnimState = ONcAnimState_Falling;
 			animFound = DoTableAnimation(inInput, ioCharacter, ioActiveCharacter, land_hard_table, ONcAnimPriority_Force, ONcNormalMove, NULL);
@@ -2712,7 +2712,7 @@ static UUtBool HandleStartLanding(const ONtInputState *inInput, ONtCharacter *io
 			ioActiveCharacter->nextAnimState = old_anim_state;
 		}
 	}
-	
+
 	if (!animFound) {
 		animFound = DoTableAnimation(inInput, ioCharacter, ioActiveCharacter, land_table, ONcAnimPriority_Force, ONcNormalMove, NULL);
 	}
@@ -2812,7 +2812,7 @@ static void ONiCycle_Weapon(const ONtInputState *inInput)
 	WPtWeaponClass			*weapon_class[64];
 	UUtUns32				num_classes;
 	UUtUns32				i;
-	
+
 	UUmAssertReadPtr(localActiveCharacter, sizeof(*localActiveCharacter));
 
 	// can't do this while running a reload or holster animation
@@ -2827,7 +2827,7 @@ static void ONiCycle_Weapon(const ONtInputState *inInput)
 			64,
 			&num_classes,
 			weapon_class);
-	
+
 	// find the weapon class of the weapon currently in use by the character
 	if (localCharacter->inventory.weapons[0])
 	{
@@ -2840,12 +2840,12 @@ static void ONiCycle_Weapon(const ONtInputState *inInput)
 	{
 		i = 0;
 	}
-	
+
 	// pick the index of the next weapon to use
 	if (inInput->buttonIsDown & LIc_BitMask_Crouch)
 	{
 		i--;
-		
+
 		if (i >= num_classes)
 		{
 			i = num_classes - 1;
@@ -2854,7 +2854,7 @@ static void ONiCycle_Weapon(const ONtInputState *inInput)
 	else
 	{
 		i++;
-		
+
 		if (i >= num_classes)
 		{
 			i = 0;
@@ -2875,7 +2875,7 @@ static void ONiCycle_Class(const ONtInputState *inInput)
 	UUtUns16 numClasses = (UUtUns16)TMrInstance_GetTagCount(TRcTemplate_CharacterClass);
 
 	if (localCharacter == NULL) return;
-	
+
 	if (inInput->buttonIsDown & LIc_BitMask_Crouch) {
 		localCharacter->characterClassNumber += numClasses - 1;
 	}
@@ -2886,13 +2886,13 @@ static void ONiCycle_Class(const ONtInputState *inInput)
 	if (numClasses > 0) {
 		localCharacter->characterClassNumber = localCharacter->characterClassNumber % numClasses;
 
-		error = TMrInstance_GetDataPtr_ByNumber(TRcTemplate_CharacterClass, localCharacter->characterClassNumber, &newClass); 
+		error = TMrInstance_GetDataPtr_ByNumber(TRcTemplate_CharacterClass, localCharacter->characterClassNumber, &newClass);
 
 		if ((newClass != NULL) && (UUcError_None == error)) {
 			ONrCharacter_SetCharacterClass(localCharacter, newClass);
 
-			COrConsole_Printf("character class %d %s", 
-				localCharacter->characterClassNumber, 
+			COrConsole_Printf("character class %d %s",
+				localCharacter->characterClassNumber,
 				TMrInstance_GetInstanceName(newClass));
 		}
 	}
@@ -3146,7 +3146,7 @@ void ONrGameState_HandleCheats(const LItInputEvent *inEvent)
 					//COrConsole_Printf("cheater %s", test_cheat->cheat_string);
 					enabled = ONrCheater(test_cheat->cheat_code);
 					message = (enabled) ? test_cheat->cheat_message1 : test_cheat->cheat_message2;
-					
+
 					if (message != NULL) {
 						ONrPauseScreen_OverrideMessage(message);
 					}
@@ -3171,10 +3171,10 @@ ONrGameState_DropFlag(
 	OBJtObject				*object;
 	M3tPoint3D				rotation;
 	UUtError				error;
-	
+
 	// calculate the facing
 	MUmVector_Set(rotation, 0.0f, inDesiredFacing * M3cRadToDeg, 0.0f);
-	
+
 	// create the new object
 	error = OBJrObject_New(OBJcType_Flag, inLocation, &rotation, NULL);
 	if (error != UUcError_None) {
@@ -3191,14 +3191,14 @@ ONrGameState_DropFlag(
 
 		if (inPrintMsg) {
 			char				name[OBJcMaxNameLength + 1];
-			
+
 			OBJrObject_GetName(object, name, OBJcMaxNameLength);
 			COrConsole_Printf("flag %s added", name);
 		}
 
 		UUmAssert(object->object_type == OBJcType_Flag);
 		flag_osd = (OBJtOSD_Flag *) object->object_data;
-		
+
 		if (outID) *outID = flag_osd->id_number;
 
 		return UUcTrue;
@@ -3214,7 +3214,7 @@ DeleteFlag(
 	ONtFlag					flag;
 	float					max_distance_squared = UUmSQR(15.f);
 	UUtBool					found;
-	
+
 	// get the closest flag
 	found = ONrLevel_Flag_Location_To_Flag(inLocation, &flag);
 	if (found == UUcFalse)
@@ -3222,13 +3222,13 @@ DeleteFlag(
 		COrConsole_Printf("could not find flag");
 		return;
 	}
-	
+
 	if (MUrPoint_Distance_Squared(inLocation, &flag.location) > max_distance_squared)
 	{
 		COrConsole_Printf("not close enough to flag");
 		return;
 	}
-	
+
 	ONrLevel_Flag_Delete(flag.idNumber);
 }
 
@@ -3246,7 +3246,7 @@ static void WriteCameraRecord(void)
 		UUtInt32 fileRefItr;
 		BFtFileRef *fileRef;
 
-		for(fileRefItr = 0; fileRefItr < 100; fileRefItr++) 
+		for(fileRefItr = 0; fileRefItr < 100; fileRefItr++)
 		{
 			char fileString[128];
 			sprintf(fileString, "cameraRecord%d.eva", fileRefItr);
@@ -3284,7 +3284,7 @@ static void WriteCameraRecord(void)
 	}
 
 	// write animation data
-	BFrFile_Write(file, sizeof(*pHeader), pHeader);	
+	BFrFile_Write(file, sizeof(*pHeader), pHeader);
 	BFrFile_Write(file, sizeof(AXtNode), pHeader->nodes);
 	BFrFile_Write(file, sizeof(M3tMatrix4x3) * pHeader->numFrames, pHeader->nodes[0].matricies);
 
@@ -3446,7 +3446,7 @@ void ONrGameState_HandleUtilityInput(const ONtInputState*	inInput)
 	if (inInput->buttonWentDown & LIc_BitMask_F7) {
 		if (inInput->buttonIsDown & LIc_BitMask_Action) {
 			ONrCharacter_Knockdown(NULL, localCharacter, ONcAnimType_Knockdown_Head);
-		}	
+		}
 		else {
 			ONiCycle_Weapon(inInput);
 		}
@@ -3506,7 +3506,7 @@ void ONrGameState_HandleUtilityInput(const ONtInputState*	inInput)
 		float unstick_z;
 
 		unstick_r = M3c2Pi - localCharacter->facing;
-		unstick_r += M3cHalfPi; 
+		unstick_r += M3cHalfPi;
 		UUmTrig_Clip(unstick_r);
 
 		unstick_x = MUrCos(unstick_r);
@@ -3527,7 +3527,7 @@ void ONrGameState_HandleUtilityInput(const ONtInputState*	inInput)
 	if (ONrDebugKey_WentDown(ONcDebugKey_CharToCamera))
 	{
 		ONtCharacter		*character;
-		
+
 		// set the character's location to the camera's location
 		character = ONrGameState_GetPlayerCharacter();
 
@@ -3551,10 +3551,10 @@ void ONrGameState_HandleUtilityInput(const ONtInputState*	inInput)
 				ONrCharacter_EnablePhysics(localCharacter);
 				UUmAssert(localActiveCharacter->physics != NULL);
 			}
-			
+
 			localActiveCharacter->physics->position = CArGetLocation();
 			character->location = localActiveCharacter->physics->position;
-			
+
 			// set the camera to follow mode
 			CArFollow_Enter();
 		}
@@ -3634,8 +3634,8 @@ static UUtBool HandleSpecialAnim(const ONtInputState *inInput, ONtCharacter *ioC
 
 	if (newAnimation != NULL) {
 		ONrCharacter_SetAnimation_External(
-			ioCharacter, 
-			ioActiveCharacter->nextAnimState, 
+			ioCharacter,
+			ioActiveCharacter->nextAnimState,
 			newAnimation,
 			interpolation);
 
@@ -3683,7 +3683,7 @@ static UUtBool ONrCharacter_IsBeingThrown(ONtActiveCharacter *ioActiveCharacter)
 
 	return is_being_thrown;
 }
-										
+
 
 // handle input for a character for a single game tick
 void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveCharacter *ioActiveCharacter)
@@ -3714,7 +3714,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 	if (ioActiveCharacter->animationLockFrames > 0) {
 		goto exit;
 	}
-	
+
 	// make sure we are called <= once per tick
 	UUmAssert(ioActiveCharacter->lastHeartbeat != ONgGameState->gameTime);
 	ioActiveCharacter->lastHeartbeat = ONgGameState->gameTime;
@@ -3754,7 +3754,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 			}
 		}
 
-		if ((ioCharacter->flags2 & ONcCharacterFlag2_WeaponEmpty) || 
+		if ((ioCharacter->flags2 & ONcCharacterFlag2_WeaponEmpty) ||
 			ONrOverlay_IsActive(ioActiveCharacter->overlay + ONcOverlayIndex_InventoryManagement)) {
 
 			// character cannot fire
@@ -3794,7 +3794,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 	}
 
 	HandleMouseInput(&input, input.turnLR, input.turnUD, ioCharacter, ioActiveCharacter);
-		
+
 	ONrCharacter_HandlePickupInput(&input, ioCharacter, ioActiveCharacter);
 
 	old_next_anim_type = ioActiveCharacter->nextAnimType;
@@ -3808,7 +3808,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 
 		found = HandleSpecialAnim(&input, ioCharacter, ioActiveCharacter);
 		if (found) { ONrCharacter_DebugHandle("HandleSpecialAnim"); break; }
-		
+
 		found = HandleStartLanding(&input, ioCharacter, ioActiveCharacter);
 		if (found) { ONrCharacter_DebugHandle("HandleStartLanding"); break; }
 
@@ -3817,7 +3817,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 
 		found = HandleStun(&input, ioCharacter, ioActiveCharacter);
 		if (found) { ONrCharacter_DebugHandle("HandleStun"); break; }
-		
+
 		found = HandleLeaveStun(&input, ioCharacter, ioActiveCharacter);
 		if (found) { ONrCharacter_DebugHandle("HandleLeaveStun"); break; }
 
@@ -3912,14 +3912,14 @@ ONrInput_Update_Keys(
 	LItButtonBits wentUp;
 
 	UUmAssertWritePtr(ioInput, sizeof(ONtInputState));
-		
+
 	lastUp = ioInput->buttonIsUp;
 	lastDown = ioInput->buttonIsDown;
 
 	currentUp = ~inNewDown;
 	currentDown = inNewDown;
 
-	wentUp = (currentUp) & (lastDown);		
+	wentUp = (currentUp) & (lastDown);
 	wentDown = (currentDown) & (lastUp);
 
 	ioInput->buttonIsUp = currentUp;
@@ -3976,24 +3976,24 @@ static void ONiGameState_ProcessMiscActions(ONtGameState *ioGameState)
 			}
 		}
 	}
-	
+
 	if (!ONgDeveloperAccess) { return; }
-	
+
 	if (ioGameState->local.localInput.buttonWentDown & LIc_BitMask_Console)
 	{
 		COrConsole_Activate();
-		
+
 //		OWrConsole_Toggle();
 	}
-	
+
 	if (ONrDebugKey_WentDown(ONcDebugKey_ProfileToggle))
 	{
 		#if defined(PROFILE) && PROFILE
 
 			UUtProfileState	profileState = UUrProfile_State_Get();
-			
+
 			profileState = (UUtProfileState)!profileState;
-			
+
 			if(profileState == UUcProfile_State_On)
 			{
 				COrConsole_Printf("Profile on");
@@ -4002,9 +4002,9 @@ static void ONiGameState_ProcessMiscActions(ONtGameState *ioGameState)
 			{
 				COrConsole_Printf("Profile off");
 			}
-			
+
 			UUrProfile_State_Set(profileState);
-			
+
 		#endif
 	}
 }
@@ -4015,7 +4015,7 @@ UUtError ONrGameState_ProcessActions(
 	if (NULL != inActionBuffer) {
 		ONiGameState_ProcessMiscActions(ONgGameState);
 	}
-	
+
 	return UUcError_None;
 }
 
@@ -4030,7 +4030,7 @@ LItButtonBits ONiRemapKeys(LItButtonBits currentDown)
 
 	if (localCharacter->neutral_interaction_char != NULL) {
 		// neutral-character interaction... mask out user input but still allow illusion of control.
-		
+
 		if (currentDown & LIc_BitMask_NeutralAbort) {
 			// the character wants to abort right now, let them
 			AI2rNeutral_Stop(localCharacter, UUcFalse, UUcTrue, UUcFalse, UUcTrue);
@@ -4051,7 +4051,7 @@ LItButtonBits ONiRemapKeys(LItButtonBits currentDown)
 				localCharacter->neutral_keyabort_frames -= 2;
 			}
 		}
-		
+
 		if (localCharacter->neutral_interaction_char != NULL) {
 			// lock out any keypresses that would stop the neutral interaction
 			currentDown &= ~LIc_BitMask_NeutralLockOut;
@@ -4119,7 +4119,7 @@ static void ONrGameState_UpdateConditionSounds(void)
 	} else {
 		ONrGameState_ConditionSound_Stop(ONcConditionSound_HealthLow);
 	}
-	
+
 	if (player->hitPoints > player->maxHitPoints) {
 		// determine the amount of boosted health
 		volume = (player->hitPoints - player->maxHitPoints) /
@@ -4188,7 +4188,7 @@ ONrGameState_ProcessHeartbeat(
 
 	UUtStallTimer heartbeat;
 	UUtStallTimer heartbeat_internal;
-	
+
 	#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
 
 		UUtUns64	time_start;
@@ -4199,20 +4199,20 @@ ONrGameState_ProcessHeartbeat(
 		UUtInt64	time_chr_start;
 		UUtUns32	time_chr = 0;
 		float		time_chr_per_gsu;
-		
+
 		UUtInt64	time_phs_start;
 		UUtUns32	time_phs = 0;
 		float		time_phs_per_gsu;
-		
+
 		UUtInt64	time_prt_start;
 		UUtUns32	time_prt = 0;
 		float		time_prt_per_gsu;
-		
+
 		char		s1[128], s2[128];
-		
+
 		time_start = UUrMachineTime_High();
 
-		// clear the timing counts 
+		// clear the timing counts
 		time_ai = 0;
 
 	#endif
@@ -4290,7 +4290,7 @@ ONrGameState_ProcessHeartbeat(
 
 	currentDown = ONiGameState_ScanButtons(inAction);
 	currentDown = ONiRemapKeys(currentDown);
-	
+
 	ONrInput_Update_Keys(&(ONgGameState->local.localInput), currentDown);
 
 	if (ONgGameState->gameTime < 14) {
@@ -4310,7 +4310,7 @@ ONrGameState_ProcessHeartbeat(
 	}
 
 //	ONrNet_NetCharacterUpdate();
-	
+
 	// Update the AI
 
 	UUrStallTimer_Begin(&heartbeat_internal);
@@ -4327,19 +4327,19 @@ ONrGameState_ProcessHeartbeat(
 
 	// Update the characters
 		#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-			
+
 			time_chr_start = UUrMachineTime_High();
-			
+
 		#endif
 
 		ONrGameState_UpdateCharacters();
-	
+
 		#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-			
+
 			time_chr += (UUtUns32)(UUrMachineTime_High() - time_chr_start);
-			
+
 		#endif
-	
+
 		// update the sky
 		//ONrSky_Update( &ONgGameState->sky );
 
@@ -4353,45 +4353,45 @@ ONrGameState_ProcessHeartbeat(
 
 	// Update the physics
 		#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-			
+
 			time_phs_start = UUrMachineTime_High();
-			
+
 		#endif
 
 		PHrPhysicsContext_Update();
-	
+
 		#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-			
+
 			time_phs += (UUtUns32)(UUrMachineTime_High() - time_phs_start);
-			
+
 		#endif
-	
+
 	// Update the particles
 		#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-			
+
 			time_prt_start = UUrMachineTime_High();
-			
+
 		#endif
 
 		// update all essential P3 particles for one heartbeat
 		P3rUpdate(ONgGameState->gameTime + 1, UUcTrue);
-	
+
 		#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-			
+
 			time_prt += (UUtUns32)(UUrMachineTime_High() - time_prt_start);
-			
+
 		#endif
 
 	UUrStallTimer_Begin(&heartbeat_internal);
 		OBrList_Update(ONgGameState->objects);
 	UUrStallTimer_End(&heartbeat_internal, "ONrGameState_ProcessHeartbeat - OBrList_Update");
-	
+
 	// update the cinematics
 	UUrStallTimer_Begin(&heartbeat_internal);
 		OCrCinematic_Update();
 	UUrStallTimer_End(&heartbeat_internal, "ONrGameState_ProcessHeartbeat - OCrCinematic_Update");
 
-	
+
 	// update the in-game UI
 	UUrStallTimer_Begin(&heartbeat_internal);
 		ONrInGameUI_Update();
@@ -4406,17 +4406,17 @@ ONrGameState_ProcessHeartbeat(
 	}
 
 	#if defined(BRENTS_CHEESY_GSU_PERF) && BRENTS_CHEESY_GSU_PERF
-	
+
 		if(ONgShowPerformance_GSU)
 		{
-			
+
 			time_total = (UUtUns32)(UUrMachineTime_High() - time_start);
-			
+
 			time_ai_per_gsu = (float)time_ai / (float)time_total;
 			time_chr_per_gsu = (float)time_chr / (float)time_total;
 			time_phs_per_gsu = (float)time_phs / (float)time_total;
 			time_prt_per_gsu = (float)time_prt / (float)time_total;
-			
+
 			sprintf(
 				s1,
 				"gsu, ai: %02.1f, chr: %02.1f",
@@ -4427,13 +4427,13 @@ ONrGameState_ProcessHeartbeat(
 				"gsu, phs: %02.1f, prt: %02.1f",
 				time_phs_per_gsu * 100.0f,
 				time_prt_per_gsu * 100.0f);
-						
+
 			ONrGameState_Performance_UpdateGSU(
 				s1,
 				s2,
 				"");
 		}
-	
+
 	#endif
 
 	UUrStallTimer_End(&heartbeat, "ONrGameState_ProcessHeartbeat");
@@ -4453,9 +4453,9 @@ static UUtError ONrGameState_UpdateSoundManager(ONtGameState *ioGameState, UUtUn
 	M3tPoint3D		location;
 	M3tPoint3D		facing;
 	CAtCamera		*camera;
-	
+
 	camera = ONgGameState->local.camera;
-		
+
 	// determine which mode to use
 	if ((camera->mode == CAcMode_Follow) &&	(ONgGameState->local.playerCharacter != NULL)) {
 		// set listener at character
@@ -4472,9 +4472,9 @@ static UUtError ONrGameState_UpdateSoundManager(ONtGameState *ioGameState, UUtUn
 		location = CArGetLocation();
 		facing = CArGetFacing();
 	}
-	
+
 	OSrUpdate(&location, &facing);
-	
+
 	return UUcError_None;
 }
 
@@ -4502,7 +4502,7 @@ static UUtUns8 iComputeDeltaTicks(ONtGameState *ioGameState)
 		ioGameState->local.sync_frames_behind = 0;
 	}
 
-	engine_delta_ticks = timing_delta_ticks; 
+	engine_delta_ticks = timing_delta_ticks;
 
 	engine_delta_ticks = UUmMin(engine_delta_ticks, cMaxTicksPerFrame);
 
@@ -4513,7 +4513,7 @@ static UUtUns8 iComputeDeltaTicks(ONtGameState *ioGameState)
 		if (ONrDebugKey_WentDown(ONcDebugKey_SingleStep)) {
 			engine_delta_ticks = 1;
 		}
-	}	
+	}
 	else if ((ONgDrawEveryFrame) || (ONgGameState->local.recordScreen)) {
 		engine_delta_ticks = ONgDrawEveryFrameMultiple;
 	}
@@ -4559,7 +4559,7 @@ static void Testing_Update(void)
 	};
 
 	KeyBindEntry *current_binding;
-	
+
 	for(current_binding = key_bindings; current_binding->variable != NULL; current_binding++)
 	{
 		if (ONrDebugKey_WentDown(current_binding->keyCode)) {
@@ -4592,7 +4592,7 @@ UUtError ONrGameState_Update(
 	if (ONgGameState->local.in_cutscene) {
 		static UUtBool old_space_was_down = UUcFalse;
 		UUtBool space_went_down = LIrKeyWentDown(LIcKeyCode_Space, &old_space_was_down);
-		
+
 		if (space_went_down) {
 			// ONrGameState_SkipCutscene();
 		}
@@ -4607,15 +4607,15 @@ UUtError ONrGameState_Update(
 			deltaTicks = 2;
 		#endif
 	#endif
-	
+
 	// ** call the heartbeat
 	for(itr = 0; itr < deltaTicks; itr++)
 	{
 		LItAction *action;
-		
+
 		if (itr < numActionsInBuffer) {
 			action = actionBuffer + itr;
-		} 
+		}
 		else {
 			action = NULL;
 		}
@@ -4631,13 +4631,13 @@ UUtError ONrGameState_Update(
 #endif
 
 	CArUpdate(0, numActionsInBuffer, actionBuffer);
-	
+
 	// record the screen if requested
 	if (ONgGameState->local.recordScreen)
 	{
 		iScreenShot(ONgScreenShotReduceAmount);
 	}
-	
+
 	// update all decorative particles to match the current game time
 	P3rUpdate(ONgGameState->gameTime, UUcFalse);
 
@@ -4646,7 +4646,7 @@ UUtError ONrGameState_Update(
 	error = ONrGameState_UpdateSoundManager(ONgGameState, deltaTicks);
 
 	// update_status_bar(deltaTicks)
-		
+
 	// check to see if we need to autosave binary data files
 	OBDrUpdate(ONgGameState->gameTime);
 
@@ -4680,7 +4680,7 @@ typedef struct Display_Performance_Variables
 	UUtInt64	time_obj;
 	UUtInt64	time_prt;
 } Display_Performance_Variables;
- 
+
 static void ONi_GameState_Display_All_UI_Elements(Display_Performance_Variables *inPerfVar)
 {
 	const UUtUns16 screen_width = M3rDraw_GetWidth();
@@ -4699,24 +4699,24 @@ static void ONi_GameState_Display_All_UI_Elements(Display_Performance_Variables 
 	}
 
 #if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
-	
+
 	if(ONgShowPerformance_GSD)
-	{	
-		double		time_total = (double) inPerfVar->time_total; 
+	{
+		double		time_total = (double) inPerfVar->time_total;
 		double		time_env_per_gsd;
 		double		time_chr_per_gsd;
 		double		time_obj_per_gsd;
 		double		time_prt_per_gsd;
-		
+
 		char		s1[128], s2[128], s3[128];
 
 		extern UUtUns16	ONgNumCharactersDrawn;
-		
+
 		time_env_per_gsd = inPerfVar->time_env / time_total;
 		time_chr_per_gsd = inPerfVar->time_chr / time_total;
 		time_obj_per_gsd = inPerfVar->time_obj / time_total;
 		time_prt_per_gsd = inPerfVar->time_prt / time_total;
-		
+
 		sprintf(
 			s1,
 			"gsd, env: %02.1f, chr: %02.1f obj: %02.1f, prt: %02.1f",
@@ -4730,8 +4730,8 @@ static void ONi_GameState_Display_All_UI_Elements(Display_Performance_Variables 
 			static UUtUns32 highDownloadTime = 0;
 			char downloadStr[32];
 			char maxDownloadStr[32];
-			
-			
+
+
 			if ((ONgPerformanceData.textureDownload > highDownload) || (UUrMachineTime_Sixtieths() > (highDownloadTime+120)))
 			{
 				highDownload = ONgPerformanceData.textureDownload;
@@ -4745,7 +4745,7 @@ static void ONi_GameState_Display_All_UI_Elements(Display_Performance_Variables 
 				s2,
 				"gsd, texture = %s max %s M", downloadStr, maxDownloadStr);
 		}
-		
+
 		sprintf(
 			s3,
 			"nc: %02d, np: %04d, nq: %05d, na: %04d",
@@ -4753,7 +4753,7 @@ static void ONi_GameState_Display_All_UI_Elements(Display_Performance_Variables 
 			0,	// counter for num particles goes here
 			ONgPerformanceData.numTriSplits + ONgPerformanceData.numQuadSplits * 2 + ONgPerformanceData.numPentSplits * 3,
 			ONgPerformanceData.numAlphaSortedObjs);
-		
+
 		ONrGameState_Performance_UpdateGSD(
 			s1,
 			s2,
@@ -4805,22 +4805,22 @@ static void ONrBlanketScreen(float inA, float inR, float inG, float inB)
 	intB = (UUtUns8) MUrUnsignedSmallFloat_To_Uns_Round(inB * 255.f);
 
 	intShade = (intR << 16) | (intG << 8) | (intB);
-	
+
 	M3rDraw_State_Push();
-	
+
 	M3rDraw_State_SetInt(M3cDrawStateIntType_ConstantColor, intShade);
 	M3rDraw_State_SetInt(M3cDrawStateIntType_Alpha, MUrUnsignedSmallFloat_To_Uns_Round(M3cMaxAlpha * inA));
-	
+
 	M3rDraw_State_SetPtr(
 		M3cDrawStatePtrType_BaseTextureMap,
 		ONgLetterboxTexture);
-	
+
 	M3rDraw_State_SetInt(
 		M3cDrawStateIntType_Interpolation,
 		M3cDrawState_Interpolation_None);
-		
+
 	M3rDraw_State_Commit();
-	
+
 	M3rDraw_Sprite(
 		dest,
 		uv);
@@ -4957,7 +4957,7 @@ static void ONiGameState_Display_Overlay_Elements(Display_Performance_Variables	
 #else
 		ONi_GameState_Display_All_UI_Elements(NULL);
 #endif
-		
+
 		SSrShowDebugInfo();
 
 		if (ONgFontCache_Display) {
@@ -4966,20 +4966,20 @@ static void ONiGameState_Display_Overlay_Elements(Display_Performance_Variables	
 
 		COrConsole_StatusLine_Display();
 
-		ONi_GameState_Display_FadeInOut();	
+		ONi_GameState_Display_FadeInOut();
 
 		if ((!ONgGameState->local.letterbox.active) && (!ONgGameState->local.fadeInfo.active)) {
 			// Display the text messages
 			COrConsole_Display_Messages();
 		}
-		
+
 		// Display the console
 		COrConsole_Display_Lines();
 
 		// draw the cinematics
 		OCrCinematic_Draw();
 
-		ONi_GameState_Display_SkipCutsceneFade();	
+		ONi_GameState_Display_SkipCutsceneFade();
 
 		COrConsole_Display_Console();
 	M3rGeom_State_Pop();
@@ -4991,7 +4991,7 @@ static void ONiGameState_Display_Overlay_Elements(Display_Performance_Variables	
 static void ONiGameState_Display_NonReflectable_Tool(Display_Performance_Variables	*ioPerfVars)
 {
 	if (ONgShowQuadCount) {
-		sprintf(quad_count_display[1].text, "quad count %d / %d", 
+		sprintf(quad_count_display[1].text, "quad count %d / %d",
 			AKrEnvironment_GetVisCount(ONgGameState->level->environment),
 			ONgGameState->level->environment->gqRenderArray->numGQs);
 	}
@@ -5007,10 +5007,10 @@ static void ONiGameState_Display_NonReflectable_Tool(Display_Performance_Variabl
 			}
 		}
 
-		sprintf(object_count_display[1].text, "object count %d/%d [watermark %d]", 
+		sprintf(object_count_display[1].text, "object count %d/%d [watermark %d]",
 			object_count, ONgGameState->objects->maxObjects, ONgGameState->objects->numObjects);
 	}
-	
+
 	if (ONgShowPhysicsCount) {
 		UUtUns32 physics_itr;
 		UUtUns32 physics_count = 0;
@@ -5044,21 +5044,21 @@ ONiGameState_Display_NonReflectable(
 	M3tGeomCamera*	activeCamera;
 	UUtBool			render_sky_this_frame = UUcTrue;
 	UUtBool			is_skipping_cutscene = (ONgGameState->local.in_cutscene) && (ONcCutsceneSkip_skipping == ONgGameState->local.cutscene_skip_mode);
-	
+
 	// start the environment
 	if (ONgShow_Environment)
-	{		
+	{
 		#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 		ioPerfVars->time_env -= UUrMachineTime_High();
 		#endif
-		
+
 		M3rCamera_GetActive(&activeCamera);
-		
+
 		error = AKrEnvironment_StartFrame(ONgGameState->level->environment, ONgVisibilityCamera, &render_sky_this_frame);
 		UUmError_ReturnOnError(error);
 
 		render_sky_this_frame &= !is_skipping_cutscene;
-		
+
 		#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 		ioPerfVars->time_env += UUrMachineTime_High();
 		#endif
@@ -5066,13 +5066,13 @@ ONiGameState_Display_NonReflectable(
 #if 0
 		M3rMinMaxBBox_Draw_Line(&ONgGameState->level->environment->visible_bbox, IMcShade_White);
 
-		COrConsole_Printf("x %f, %f", 
+		COrConsole_Printf("x %f, %f",
 			ONgGameState->level->environment->visible_bbox.minPoint.x,
 			ONgGameState->level->environment->visible_bbox.maxPoint.x);
-		COrConsole_Printf("y %f, %f", 
+		COrConsole_Printf("y %f, %f",
 			ONgGameState->level->environment->visible_bbox.minPoint.y,
 			ONgGameState->level->environment->visible_bbox.maxPoint.y);
-		COrConsole_Printf("z %f, %f", 
+		COrConsole_Printf("z %f, %f",
 			ONgGameState->level->environment->visible_bbox.minPoint.z,
 			ONgGameState->level->environment->visible_bbox.maxPoint.z);
 #endif
@@ -5110,9 +5110,9 @@ ONiGameState_Display_NonReflectable(
 		M3rGeom_Line_Light(&ONgGameState->local.playerCharacter->actual_position, &midpoint, IMcShade_Yellow);
 	}
 
-	
+
 	P3rNotifySkyVisible(render_sky_this_frame);
-	
+
 	// End the environment
 	if (ONgShow_Environment)
 	{
@@ -5134,9 +5134,9 @@ ONiGameState_Display_NonReflectable(
 	ONiGameState_Display_NonReflectable_Tool(ioPerfVars);
 #endif
 
-	// Draw the cross hair	
+	// Draw the cross hair
 	AMrRenderCrosshair();
-	
+
 	return UUcError_None;
 }
 
@@ -5159,30 +5159,30 @@ ONiGameState_Display_Reflectable(
 
 	UUrStallTimer_End(&reflectable_internal, "ONiGameState_Display_Reflectable - line drawing");
 
-	
+
 	UUrStallTimer_Begin(&reflectable_internal);
 
 	// Draw the characters
 	if(ONgShow_Characters)
 	{
 		UUtUns32	itr=0;
-		
+
 		#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 		ioPerfVars->time_chr -= UUrMachineTime_High();
 		#endif
-		
+
 		M3rDraw_State_SetInt(M3cDrawStateIntType_Time, ONgGameState->gameTime);
 
 		ONrGameState_DisplayCharacters();
 		ONrGameState_MotionBlur_Display();
-		
+
 		#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 		ioPerfVars->time_chr += UUrMachineTime_High();
 		#endif
 	}
 
 	UUrStallTimer_End(&reflectable_internal, "ONiGameState_Display_Reflectable - characters");
-		
+
 	// Draw the object list
 	#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 	ioPerfVars->time_obj -= UUrMachineTime_High();
@@ -5209,7 +5209,7 @@ ONiGameState_Display_Reflectable(
 	#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 	ioPerfVars->time_obj += UUrMachineTime_High();
 	#endif
-	
+
 	// Draw the weapons
 	UUrStallTimer_Begin(&reflectable_internal);
 
@@ -5230,7 +5230,7 @@ ONiGameState_Display_Reflectable(
 		M3rGeom_State_Set(M3cGeomStateIntType_SubmitMode, M3cGeomState_SubmitMode_Normal);
 		M3rGeom_State_Commit();
 		P3rDisplayStaticDecals( );
-		P3rDisplayDynamicDecals( );		
+		P3rDisplayDynamicDecals( );
 		M3rGeom_State_Set(M3cGeomStateIntType_SubmitMode, M3cGeomState_SubmitMode_SortAlphaTris);
 		M3rGeom_State_Commit();
 	}
@@ -5246,18 +5246,18 @@ ONiGameState_Display_Reflectable(
 	}
 
 	UUrStallTimer_End(&reflectable_internal, "ONiGameState_Display_Reflectable - particles");
-	
+
 	#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 	ioPerfVars->time_prt += UUrMachineTime_High();
 	#endif
-	
+
 	UUrStallTimer_Begin(&reflectable_internal);
 
 	// Draw the ammo
 	WPrPowerup_Display();
 
 	UUrStallTimer_End(&reflectable_internal, "ONiGameState_Display_Reflectable - powerup display");
-	
+
 #if TOOL_VERSION
 	UUrStallTimer_Begin(&reflectable_internal);
 	// DEBUGGING: draw currently selected AI path
@@ -5287,7 +5287,7 @@ void ONrGameState_Display(void)
 #endif
 
 	UUrStallTimer_Begin(&stall_timer_display);
-		
+
 	AKrEnvironment_FastMode(ONrGameState_IsSkippingCutscene());
 
 	UUmAssertReadPtr(ONgGameState->level->environment,sizeof(AKtEnvironment));
@@ -5295,7 +5295,7 @@ void ONrGameState_Display(void)
 	#if defined(BRENTS_CHEESY_GSD_PERF) && BRENTS_CHEESY_GSD_PERF
 	perf_var.time_total -= UUrMachineTime_High();
 	#endif
-	
+
 	MUmVector_Verify(ONgGameState->local.camera->viewData.viewVector);
 
 	M3rGeom_State_Set(M3cGeomStateIntType_SubmitMode, M3cGeomState_SubmitMode_SortAlphaTris);
@@ -5303,7 +5303,7 @@ void ONrGameState_Display(void)
 	M3rGeom_State_Set(M3cGeomStateIntType_Fill, ONgMotoko_FillSolid ? M3cGeomState_Fill_Solid : M3cGeomState_Fill_Line);
 	M3rGeom_State_Set(M3cGeomStateIntType_Appearance, ONgMotoko_Texture ? M3cGeomState_Appearance_Texture : M3cGeomState_Appearance_Gouraud);
 	M3rGeom_State_Set(M3cGeomStateIntType_FastMode, ONrGameState_IsSkippingCutscene());
-	
+
 	M3rGeom_State_Set(M3cGeomStateIntType_Alpha, 0xff);
 
 	// These have no geom state equivalent
@@ -5313,7 +5313,7 @@ void ONrGameState_Display(void)
 	M3rDraw_State_SetInt(M3cDrawStateIntType_ZWrite, M3cDrawState_ZWrite_On);
 	M3rDraw_State_SetInt(M3cDrawStateIntType_ClearColor, ONgMotoko_ClearColor);
 	M3rGeom_State_Commit();
-		
+
 	// main drawing
 	UUrStallTimer_Begin(&stall_timer_display_internal);
 		ONiGameState_Display_NonReflectable(&perf_var);
@@ -5370,8 +5370,8 @@ iDebugExportGunk(
 	SLtErrorContext*		inErrorContext,
 	UUtUns32				inParameterListLength,
 	SLtParameter_Actual		*inParameterList,
-	UUtUns32				*outTicksTillCompletion,	
-	UUtBool					*outStall,					
+	UUtUns32				*outTicksTillCompletion,
+	UUtBool					*outStall,
 	SLtParameter_Actual		*ioReturnValue)
 {
 	UUtError error;
@@ -5388,8 +5388,8 @@ iDebugEnvAnim(
 	SLtErrorContext*		inErrorContext,
 	UUtUns32				inParameterListLength,
 	SLtParameter_Actual		*inParameterList,
-	UUtUns32				*outTicksTillCompletion,	
-	UUtBool					*outStall,					
+	UUtUns32				*outTicksTillCompletion,
+	UUtBool					*outStall,
 	SLtParameter_Actual		*ioReturnValue)
 {
 	char *animation_name = inParameterList[0].val.str;
@@ -5402,11 +5402,11 @@ iDebugEnvAnim(
 
 	if (UUcError_None == error) {
 		ONgLineSize = animation->numFrames;
-		COrConsole_Printf("found %d frames", ONgLineSize);		
+		COrConsole_Printf("found %d frames", ONgLineSize);
 	}
 	else {
 		ONgLineSize = 0;
-		COrConsole_Printf("not found");		
+		COrConsole_Printf("not found");
 	}
 
 	ONgLine = UUrMemory_Block_Realloc(ONgLine, sizeof(M3tPoint3D) * ONgLineSize);
@@ -5414,7 +5414,7 @@ iDebugEnvAnim(
 	{
 		UUtInt32 itr;
 
-		for(itr = 0; itr < ONgLineSize; itr++) 
+		for(itr = 0; itr < ONgLineSize; itr++)
 		{
 			M3tMatrix4x3 matrix;
 
@@ -5433,7 +5433,7 @@ ONrGameState_Initialize(
 	void)
 {
 	UUtError	error;
-	SLtRegisterBoolTable bool_table[] = 
+	SLtRegisterBoolTable bool_table[] =
 	{
 #if CONSOLE_DEBUGGING_COMMANDS
 		{ "gs_show_particles", "Turns on the drawing of particles", &ONgParticle_Display },
@@ -5468,7 +5468,7 @@ ONrGameState_Initialize(
 		{ NULL, NULL, NULL }
 	};
 
-	SLtRegisterFloatTable float_table[] = 
+	SLtRegisterFloatTable float_table[] =
 	{
 #if CONSOLE_DEBUGGING_COMMANDS
 		{ "gs_input_accel", "Use this to control the input sensitivity", &ONgGameState_InputAccel },
@@ -5476,7 +5476,7 @@ ONrGameState_Initialize(
 		{ NULL, NULL, NULL }
 	};
 
-	SLtRegisterInt32Table int32_table[] = 
+	SLtRegisterInt32Table int32_table[] =
 	{
 #if CONSOLE_DEBUGGING_COMMANDS
 		{ "gs_screen_shot_reduce", "2^n amount of reduction", &ONgScreenShotReduceAmount },
@@ -5546,7 +5546,7 @@ ONrGameState_Initialize(
 	strcpy(script_count_display[0].text,	"*** script count display ***");
 	strcpy(script_count_display[1].text, "");
 #endif
-	
+
 	ONgGameState = (ONtGameState *) UUrMemory_Block_NewClear(sizeof(ONtGameState));
 	if (NULL == ONgGameState)
 	{
@@ -5557,7 +5557,7 @@ ONrGameState_Initialize(
 
 	error = AI2rInstallConsoleVariables();
 	UUmError_ReturnOnError(error);
-	
+
 	// initialize the gamestate dialogs
 /*	error = ONrGameState_Dialog_Initialize();
 	UUmError_ReturnOnError(error);*/
@@ -5565,7 +5565,7 @@ ONrGameState_Initialize(
 	// Install the console variables for the characters
 	error = ONrGameState_InstallConsoleVariables();
 	UUmError_ReturnOnError(error);
-	
+
 	// Install the console variables for the weapons
 	error = WPrInitialize();
 	UUmError_ReturnOnError(error);
@@ -5584,7 +5584,7 @@ ONrGameState_Terminate(
 	if(ONgGameState != NULL)
 	{
 		UUmAssert(ONgGameState == ONgGameState);
-		
+
 		// Delete the ganestate
 		UUrMemory_Block_Delete(ONgGameState);
 		ONgGameState = NULL;
@@ -5707,7 +5707,7 @@ ONrGameState_Pause(
 	static UUtProfileState	savedProfileState = UUcProfile_State_Off;
 
 	ONgGameState->paused = inPause;
-	
+
 	if (inPause == UUcFalse)
 	{
 		// have to remove cMaxTicksPerFrame or else the
@@ -5715,21 +5715,21 @@ ONrGameState_Pause(
 		ONgGameState->server.machineTimeLast =
 			UUrMachineTime_Sixtieths() -
 			cMaxTicksPerFrame;
-		
+
 		#if defined(PROFILE) && PROFILE
-			
+
 			UUrProfile_State_Set(savedProfileState);
-			
+
 		#endif
 	}
 	else
 	{
 		#if defined(PROFILE) && PROFILE
-			
+
 			savedProfileState = UUrProfile_State_Get();
-			
+
 			UUrProfile_State_Set(UUcProfile_State_Off);
-			
+
 		#endif
 	}
 }
@@ -5739,10 +5739,10 @@ UUtError ONrGameState_LevelBegin_Objects(void)
 	/****************
 	* Sets up objects for a level
 	*/
-		
+
 	ONgGameState->objects = OBrList_New(ONcMaxObjects);
 	if (!ONgGameState->objects) return UUcError_OutOfMemory;
-		
+
 	return UUcError_None;
 }
 
@@ -5751,7 +5751,7 @@ void ONrGameState_LevelEnd_Objects(void)
 	/****************
 	* Kills objects for a level
 	*/
-	
+
 	OBrList_Delete(ONgGameState->objects);
 }
 
@@ -5770,7 +5770,7 @@ ONrGameState_ResetCharacters(
 	void)
 {
 	UUtUns16			i;
-	
+
 	// delete all of the characters
 	for (i = 0; i < ONgGameState->numCharacters; i++)
 	{
@@ -5845,9 +5845,9 @@ void ONrGameState_ActiveCharacterList_Remove(ONtCharacter *inCharacter)
 
 		if (curCharacter == inCharacter) {
 			ONgGameState->numActiveCharacters--;
-			ONgGameState->activeCharacters[itr] = 
+			ONgGameState->activeCharacters[itr] =
 				ONgGameState->activeCharacters[ONgGameState->numActiveCharacters];
-			return; 
+			return;
 		}
 	}
 
@@ -5912,9 +5912,9 @@ void ONrGameState_LivingCharacterList_Remove(ONtCharacter *inCharacter)
 
 		if (curCharacter == inCharacter) {
 			ONgGameState->numLivingCharacters--;
-			ONgGameState->livingCharacters[itr] = 
+			ONgGameState->livingCharacters[itr] =
 				ONgGameState->livingCharacters[ONgGameState->numLivingCharacters];
-			return; 
+			return;
 		}
 	}
 
@@ -5974,9 +5974,9 @@ void ONrGameState_PresentCharacterList_Remove(ONtCharacter *inCharacter)
 
 		if (curCharacter == inCharacter) {
 			ONgGameState->numPresentCharacters--;
-			ONgGameState->presentCharacters[itr] = 
+			ONgGameState->presentCharacters[itr] =
 				ONgGameState->presentCharacters[ONgGameState->numPresentCharacters];
-			return; 
+			return;
 		}
 	}
 
@@ -6004,7 +6004,7 @@ void ONrGameState_FadeOut(UUtUns32 inNumFrames, float inR, float inG, float inB)
 
 void ONrGameState_FadeIn(UUtUns32 inNumFrames)
 {
-	if (ONgGameState->local.fadeInfo.active) 
+	if (ONgGameState->local.fadeInfo.active)
 	{
 		ONgGameState->local.fadeInfo.startTime = ONgGameState->gameTime;
 		ONgGameState->local.fadeInfo.endTime = ONgGameState->gameTime + inNumFrames;
@@ -6057,7 +6057,7 @@ static void ONrGameState_MotionBlur_Display_One(ONtMotionBlur *inMotionBlur)
 
 	M3rMatrixStack_Push();
 		M3rMatrixStack_Multiply(&inMotionBlur->matrix);
-	
+
 		inMotionBlur->geometry->baseMap = inMotionBlur->texture;
 		M3rGeometry_Draw(inMotionBlur->geometry);
 	M3rMatrixStack_Pop();
@@ -6149,7 +6149,7 @@ void ONrGameState_LetterBox_Update(ONtLetterBox *ioLetterBox, UUtUns32 inTicks)
 {
 	if (ioLetterBox->active) {
 		ioLetterBox->position += ONcLetterBox_Increment * inTicks;
-		
+
 		if (ioLetterBox->position >= ONcLetterBox_Depth) {
 			ioLetterBox->position = ONcLetterBox_Depth;
 			ioLetterBox->updating = UUcFalse;
@@ -6157,13 +6157,13 @@ void ONrGameState_LetterBox_Update(ONtLetterBox *ioLetterBox, UUtUns32 inTicks)
 	}
 	else {
 		ioLetterBox->position -= ONcLetterBox_Increment * inTicks;
-		
+
 		if (ioLetterBox->position <= 0) {
 			ioLetterBox->position = 0;
 			ioLetterBox->updating = UUcFalse;
 		}
 	}
-		
+
 	return;
 }
 
@@ -6187,17 +6187,17 @@ void ONrGameState_LetterBox_Display(ONtLetterBox *ioLetterBox)
 
 	screen_width = M3rDraw_GetWidth();
 	screen_height = M3rDraw_GetHeight();
-	
+
 	if ((ioLetterBox->position > 0) && (ONgLetterboxTexture != NULL)) {
 		float relative_position = ioLetterBox->position * (screen_height / 480.f);
 		M3tPointScreen points[2];
 		M3tTextureCoord uv[4];
-		
+
 		M3rDraw_State_Push();
-		
+
 		M3rDraw_State_SetInt(M3cDrawStateIntType_ConstantColor, IMcShade_Black);
 		M3rDraw_State_SetInt(M3cDrawStateIntType_Alpha, M3cMaxAlpha);
-		
+
 		M3rDraw_State_SetPtr(
 			M3cDrawStatePtrType_BaseTextureMap,
 			ONgLetterboxTexture);
@@ -6205,7 +6205,7 @@ void ONrGameState_LetterBox_Display(ONtLetterBox *ioLetterBox)
 		M3rDraw_State_SetInt(
 			M3cDrawStateIntType_Interpolation,
 			M3cDrawState_Interpolation_None);
-			
+
 		points[0].x = 0.f;
 		points[0].y = 0.f;
 		points[0].z = 0.5f;
@@ -6215,20 +6215,20 @@ void ONrGameState_LetterBox_Display(ONtLetterBox *ioLetterBox)
 		points[1].y = relative_position;
 		points[1].z = 0.5f;
 		points[1].invW = 2.f;
-		
+
 		M3rDraw_State_Commit();
-		
+
 		M3rDraw_Sprite(
-			points, 
+			points,
 			uv);
 
 		points[0].y = (float) (screen_height - relative_position);
 		points[1].y = (float) (screen_height);
 
 		M3rDraw_Sprite(
-			points, 
+			points,
 			uv);
-		
+
 		M3rDraw_State_Pop();
 	}
 
@@ -6258,7 +6258,7 @@ void ONrGameState_BeginCutscene(UUtUns32 inCutsceneFlags)
 
 	if (!(inCutsceneFlags & ONcCutsceneFlag_RetainAnimation)) {
 		ONrCharacter_ForceStand(player_character);
-		
+
 		if (player_active_character != NULL) {
 			player_active_character->stitch.velocity = MUgZeroVector;
 		}
@@ -6385,7 +6385,7 @@ void ONrGameState_SkipCutscene(void)
 
 				ONgGameState->local.cutscene_skip_timer = ONcNumber_of_frames_for_cutscene_skip_timer;
 				ONgGameState->local.cutscene_skip_mode = ONcCutsceneSkip_starting;
-				
+
 				OSrSetEnabled(UUcFalse);
 			}
 		}
@@ -6479,7 +6479,7 @@ void ONrGameState_Timer_Update(void)
 			if (0 == timer->ticks_remaining) {
 				timer->timer_mode = ONcTimerMode_Fail;
 				timer->ticks_remaining = 5 * UUcFramesPerSecond;	// 5 seconds of 00:00 blinking
-				SLrScript_ExecuteOnce(timer->script, 0, NULL, NULL, NULL);				
+				SLrScript_ExecuteOnce(timer->script, 0, NULL, NULL, NULL);
 			}
 		break;
 
@@ -6506,7 +6506,7 @@ void ONrGameState_Timer_Update(void)
 void ONrGameState_Timer_Display(const M3tPointScreen *inCenter)
 {
 	ONtTimer *timer = &ONgGameState->local.timer;
-	
+
 	{
 		if (ONcTimerMode_Off == timer->timer_mode) {
 			goto exit;
@@ -6579,7 +6579,7 @@ void ONrGameState_Timer_Display(const M3tPointScreen *inCenter)
 			break;
 		}
 
-	
+
 		{
 			UUtRect rect;
 			IMtPoint2D draw_location;
@@ -6587,7 +6587,7 @@ void ONrGameState_Timer_Display(const M3tPointScreen *inCenter)
 			const UUtUns16 screen_height = M3rDraw_GetHeight();
 			UUtUns16 string_width;
 			UUtUns16 string_height;
-			
+
 			TSrContext_GetStringRect(ONgTimerTextContext, display_string, &rect);
 			string_width = rect.right - rect.left;
 			string_height = TSrFont_GetAscendingHeight(TSrContext_GetFont(ONgTimerTextContext, TScStyle_Plain));
@@ -6704,7 +6704,7 @@ void ONrGameState_MakeContinue(UUtUns32 inSavePoint, UUtBool inAutoSave)
 
 		ONrPersist_SetPlace(&place);
 	}
-	
+
 	return;
 }
 
@@ -6820,13 +6820,13 @@ void ONrGameState_ConditionSound_Start(UUtUns32 inCondition, float inVolume)
 	if ((ONgGameState->condition_active & mask) == 0) {
 		// start the sound!
 		ONgGameState->condition_active |= mask;
-		
+
 		if (ONgGameSettingsRuntime.condition_sound[inCondition] != NULL) {
 			ONgGameState->condition_playid[inCondition] =
 						SSrAmbient_Start_Simple(ONgGameSettingsRuntime.condition_sound[inCondition], &inVolume);
 		}
 //		COrConsole_Printf("condition %s start %f", ONcConditionSoundName[inCondition], inVolume);
-	
+
 	} else if (ONgGameState->condition_playid[inCondition] != SScInvalidID) {
 		// the sound is already playing, just change its volume
 		SSrAmbient_SetVolume(ONgGameState->condition_playid[inCondition], inVolume, 1.0f);
@@ -6970,7 +6970,7 @@ static void ONrGameState_UpdateAutoPrompt(void)
 		// hypo usage has a higher priority than using consoles
 		if (player->inventory.hypo > 0) {
 			if (player->hitPoints <= (player->maxHitPoints * ONcIGUI_HealthWarnLevel) / 100) {
-				ONiGameState_FindAutoPromptMessage("usehypo", &message);				
+				ONiGameState_FindAutoPromptMessage("usehypo", &message);
 			}
 		}
 	}

@@ -7,7 +7,7 @@
 **
 **	File:		DirectoryCopy.h
 **
-**	Copyright © 1992-1999 Apple Computer, Inc.
+**	Copyright Â© 1992-1999 Apple Computer, Inc.
 **	All rights reserved.
 **
 **	You may incorporate this sample code into your applications without
@@ -53,7 +53,7 @@ typedef	pascal	Boolean	(*CopyErrProcPtr) (OSErr error,
 										   short dstVRefNum,
 										   long dstDirID,
 										   ConstStr255Param dstName);
-/*	¦ Prototype for the CopyErrProc function DirectoryCopy calls.
+/*	Â¶ Prototype for the CopyErrProc function DirectoryCopy calls.
 	This is the prototype for the CopyErrProc function DirectoryCopy
 	calls if an error condition is detected sometime during the copy.  If
 	CopyErrProc returns false, then DirectoryCopy attempts to continue with
@@ -74,7 +74,7 @@ typedef	pascal	Boolean	(*CopyErrProcPtr) (OSErr error,
 							dstDirID specifies the directory.
 
 	__________
-	
+
 	Also see:	FilteredDirectoryCopy, FSpFilteredDirectoryCopy, DirectoryCopy, FSpDirectoryCopy
 */
 
@@ -85,15 +85,15 @@ typedef	pascal	Boolean	(*CopyErrProcPtr) (OSErr error,
 
 typedef	pascal	Boolean	(*CopyFilterProcPtr) (const CInfoPBRec * const cpbPtr);
 
-/*	¦ Prototype for the CopyFilterProc function.
+/*	Â¶ Prototype for the CopyFilterProc function.
 	This is the prototype for the CopyFilterProc function called by
 	FilteredDirectoryCopy and GetLevelSize. If true is returned,
 	the file/folder is included in the copy, otherwise it is excluded.
-	
+
 	pb	input:	Points to the CInfoPBRec for the item under consideration.
 
 	__________
-	
+
 	Also see:	FilteredDirectoryCopy, FSpFilteredDirectoryCopy
 */
 
@@ -113,7 +113,7 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 									  Boolean preflight,
 									  CopyErrProcPtr copyErrHandler,
 									  CopyFilterProcPtr copyFilterProc);
-/*	¦ Make a copy of a directory structure in a new location with item filtering.
+/*	Â¶ Make a copy of a directory structure in a new location with item filtering.
 	The FilteredDirectoryCopy function makes a copy of a directory
 	structure in a new location. If copyBufferPtr <> NIL, it points to
 	a buffer of copyBufferSize that is used to copy files data. The
@@ -121,10 +121,10 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 	copyBufferPtr = NIL, then this routine allocates a buffer in the
 	application heap. If you pass a copy buffer to this routine, make
 	its size a multiple of 512 ($200) bytes for optimum performance.
-	
+
 	The optional copyFilterProc parameter lets a routine you define
 	decide what files or directories are copied to the destination.
-	
+
 	FilteredDirectoryCopy normally creates a new directory *in* the
 	specified destination directory and copies the source directory's
 	content into the new directory. However, if root parent directory
@@ -136,7 +136,7 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 	This special case is supported by FilteredDirectoryCopy, but
 	not by FSpFilteredDirectoryCopy since with FSpFilteredDirectoryCopy,
 	the dstName parameter can not be NULL.
-	
+
 	srcVRefNum		input:	Source volume specification.
 	srcDirID		input:	Source directory ID.
 	srcName			input:	Source directory name, or nil if
@@ -168,17 +168,17 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 	copyFilterProc	input:	A pointer to the filter routine you want called
 							for each item in the source directory, or NULL
 							if you don't want to filter.
-	
+
 	Result Codes
 		noErr				0		No error
-		readErr				Ð19		Driver does not respond to read requests
-		writErr				Ð20		Driver does not respond to write requests
-		badUnitErr			Ð21		Driver reference number does not
+		readErr				â€“19		Driver does not respond to read requests
+		writErr				â€“20		Driver does not respond to write requests
+		badUnitErr			â€“21		Driver reference number does not
 									match unit table
-		unitEmptyErr		Ð22		Driver reference number specifies a
+		unitEmptyErr		â€“22		Driver reference number specifies a
 									nil handle in unit table
-		abortErr			Ð27		Request aborted by KillIO
-		notOpenErr			Ð28		Driver not open
+		abortErr			â€“27		Request aborted by KillIO
+		notOpenErr			â€“28		Driver not open
 		dskFulErr			-34		Destination volume is full
 		nsvErr				-35		No such volume
 		ioErr				-36		I/O error
@@ -206,9 +206,9 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 									modes
 		afpObjectTypeErr	-5025	Source is a directory, directory not found
 									or incomplete pathname
-	
+
 	__________
-	
+
 	Also see:	CopyErrProcPtr, CopyFilterProcPtr, FSpFilteredDirectoryCopy,
 				DirectoryCopy, FSpDirectoryCopy, FileCopy, FSpFileCopy
 */
@@ -223,7 +223,7 @@ pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 										 Boolean preflight,
 										 CopyErrProcPtr copyErrHandler,
 										 CopyFilterProcPtr copyFilterProc);
-/*	¦ Make a copy of a directory structure in a new location with item filtering.
+/*	Â¶ Make a copy of a directory structure in a new location with item filtering.
 	The FSpFilteredDirectoryCopy function makes a copy of a directory
 	structure in a new location. If copyBufferPtr <> NIL, it points to
 	a buffer of copyBufferSize that is used to copy files data. The
@@ -231,10 +231,10 @@ pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 	copyBufferPtr = NIL, then this routine allocates a buffer in the
 	application heap. If you pass a copy buffer to this routine, make
 	its size a multiple of 512 ($200) bytes for optimum performance.
-	
+
 	The optional copyFilterProc parameter lets a routine you define
 	decide what files or directories are copied to the destination.
-	
+
 	srcSpec			input:	An FSSpec record specifying the directory to copy.
 	dstSpec			input:	An FSSpec record specifying destination directory
 							of the copy.
@@ -261,17 +261,17 @@ pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 	copyFilterProc	input:	A pointer to the filter routine you want called
 							for each item in the source directory, or NULL
 							if you don't want to filter.
-	
+
 	Result Codes
 		noErr				0		No error
-		readErr				Ð19		Driver does not respond to read requests
-		writErr				Ð20		Driver does not respond to write requests
-		badUnitErr			Ð21		Driver reference number does not
+		readErr				â€“19		Driver does not respond to read requests
+		writErr				â€“20		Driver does not respond to write requests
+		badUnitErr			â€“21		Driver reference number does not
 									match unit table
-		unitEmptyErr		Ð22		Driver reference number specifies a
+		unitEmptyErr		â€“22		Driver reference number specifies a
 									nil handle in unit table
-		abortErr			Ð27		Request aborted by KillIO
-		notOpenErr			Ð28		Driver not open
+		abortErr			â€“27		Request aborted by KillIO
+		notOpenErr			â€“28		Driver not open
 		dskFulErr			-34		Destination volume is full
 		nsvErr				-35		No such volume
 		ioErr				-36		I/O error
@@ -299,9 +299,9 @@ pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 									modes
 		afpObjectTypeErr	-5025	Source is a directory, directory not found
 									or incomplete pathname
-	
+
 	__________
-	
+
 	Also see:	CopyErrProcPtr, CopyFilterProcPtr, FilteredDirectoryCopy,
 				DirectoryCopy, FSpDirectoryCopy, FileCopy, FSpFileCopy
 */
@@ -319,7 +319,7 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 							  long copyBufferSize,
 							  Boolean preflight,
 							  CopyErrProcPtr copyErrHandler);
-/*	¦ Make a copy of a directory structure in a new location.
+/*	Â¶ Make a copy of a directory structure in a new location.
 	The DirectoryCopy function makes a copy of a directory structure in a
 	new location. If copyBufferPtr <> NIL, it points to a buffer of
 	copyBufferSize that is used to copy files data.  The larger the
@@ -327,7 +327,7 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 	routine allocates a buffer in the application heap. If you pass a
 	copy buffer to this routine, make its size a multiple of 512
 	($200) bytes for optimum performance.
-	
+
 	DirectoryCopy normally creates a new directory *in* the specified
 	destination directory and copies the source directory's content into
 	the new directory. However, if root parent directory (fsRtParID)
@@ -338,7 +338,7 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 	destination volume's root directory. This special case is supported
 	by DirectoryCopy, but not by FSpDirectoryCopy since with
 	FSpDirectoryCopy, the dstName parameter can not be NULL.
-	
+
 	srcVRefNum		input:	Source volume specification.
 	srcDirID		input:	Source directory ID.
 	srcName			input:	Source directory name, or nil if
@@ -367,17 +367,17 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 							error will cause the copy to quit and
 							DirectoryCopy will return the error.
 							Error handling is recommended...
-	
+
 	Result Codes
 		noErr				0		No error
-		readErr				Ð19		Driver does not respond to read requests
-		writErr				Ð20		Driver does not respond to write requests
-		badUnitErr			Ð21		Driver reference number does not
+		readErr				â€“19		Driver does not respond to read requests
+		writErr				â€“20		Driver does not respond to write requests
+		badUnitErr			â€“21		Driver reference number does not
 									match unit table
-		unitEmptyErr		Ð22		Driver reference number specifies a
+		unitEmptyErr		â€“22		Driver reference number specifies a
 									nil handle in unit table
-		abortErr			Ð27		Request aborted by KillIO
-		notOpenErr			Ð28		Driver not open
+		abortErr			â€“27		Request aborted by KillIO
+		notOpenErr			â€“28		Driver not open
 		dskFulErr			-34		Destination volume is full
 		nsvErr				-35		No such volume
 		ioErr				-36		I/O error
@@ -405,9 +405,9 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 									modes
 		afpObjectTypeErr	-5025	Source is a directory, directory not found
 									or incomplete pathname
-	
+
 	__________
-	
+
 	Also see:	CopyErrProcPtr, FSpDirectoryCopy, FilteredDirectoryCopy,
 				FSpFilteredDirectoryCopy, FileCopy, FSpFileCopy
 */
@@ -421,7 +421,7 @@ pascal	OSErr	FSpDirectoryCopy(const FSSpec *srcSpec,
 								 long copyBufferSize,
 								 Boolean preflight,
 								 CopyErrProcPtr copyErrHandler);
-/*	¦ Make a copy of a directory structure in a new location.
+/*	Â¶ Make a copy of a directory structure in a new location.
 	The FSpDirectoryCopy function makes a copy of a directory structure in a
 	new location. If copyBufferPtr <> NIL, it points to a buffer of
 	copyBufferSize that is used to copy files data.  The larger the
@@ -429,7 +429,7 @@ pascal	OSErr	FSpDirectoryCopy(const FSSpec *srcSpec,
 	routine allocates a buffer in the application heap. If you pass a
 	copy buffer to this routine, make its size a multiple of 512
 	($200) bytes for optimum performance.
-	
+
 	srcSpec			input:	An FSSpec record specifying the directory to copy.
 	dstSpec			input:	An FSSpec record specifying destination directory
 							of the copy.
@@ -453,17 +453,17 @@ pascal	OSErr	FSpDirectoryCopy(const FSSpec *srcSpec,
 							error will cause the copy to quit and
 							DirectoryCopy will return the error.
 							Error handling is recommended...
-	
+
 	Result Codes
 		noErr				0		No error
-		readErr				Ð19		Driver does not respond to read requests
-		writErr				Ð20		Driver does not respond to write requests
-		badUnitErr			Ð21		Driver reference number does not
+		readErr				â€“19		Driver does not respond to read requests
+		writErr				â€“20		Driver does not respond to write requests
+		badUnitErr			â€“21		Driver reference number does not
 									match unit table
-		unitEmptyErr		Ð22		Driver reference number specifies a
+		unitEmptyErr		â€“22		Driver reference number specifies a
 									nil handle in unit table
-		abortErr			Ð27		Request aborted by KillIO
-		notOpenErr			Ð28		Driver not open
+		abortErr			â€“27		Request aborted by KillIO
+		notOpenErr			â€“28		Driver not open
 		dskFulErr			-34		Destination volume is full
 		nsvErr				-35		No such volume
 		ioErr				-36		I/O error
@@ -491,9 +491,9 @@ pascal	OSErr	FSpDirectoryCopy(const FSSpec *srcSpec,
 									modes
 		afpObjectTypeErr	-5025	Source is a directory, directory not found
 									or incomplete pathname
-	
+
 	__________
-	
+
 	Also see:	CopyErrProcPtr, DirectoryCopy, FilteredDirectoryCopy,
 				FSpFilteredDirectoryCopy, FileCopy, FSpFileCopy
 */

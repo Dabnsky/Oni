@@ -7,7 +7,7 @@
 **
 **	File:		Search.h
 **
-**	Copyright © 1992-1999 Apple Computer, Inc.
+**	Copyright Â© 1992-1999 Apple Computer, Inc.
 **	All rights reserved.
 **
 **	You may incorporate this sample code into your applications without
@@ -35,12 +35,12 @@ extern "C" {
 
 pascal	OSErr	IndexedSearch(CSParamPtr pb,
 							  long dirID);
-/*	¦ Search in and below a directory.
+/*	Â¶ Search in and below a directory.
 	The IndexedSearch function performs an indexed search in and below the
 	specified directory using the same parameters (in pb) as is passed to
 	PBCatSearch. See Inside Macintosh: Files for a description of the
 	parameter block.
-	
+
 	pb			input:	A CSParamPtr record specifying the volume to search
 						and the search criteria.
 				output:	Fields in the parameter block are returned indicating
@@ -50,13 +50,13 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 						off.
 	dirID		input:	The directory to search. If fsRtDirID is passed,
 						the entire volume is searched.
-	
+
 	Note:	If you use a high-level debugger and use ioSearchTime to limit
 			the length of time to run the search, you'll want to step over
 			calls to IndexedSearch because it installs a Time Manager task.
 			Most high-level debuggers don't deal gracefully with interrupt
 			driven code.
-	
+
 	Result Codes
 		noErr				0		No error
 		nsvErr				-35		Volume not found
@@ -70,21 +70,21 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 		memFullErr			-108	Memory could not be allocated in heap
 		catChangedErr		-1304	Catalog has changed and catalog position
 									record may be invalid
-	
+
 	__________
-	
+
 	See also:	PBCatSearch, PBCatSearchSyncCompat
 */
 
 /*****************************************************************************/
 
 pascal	OSErr	PBCatSearchSyncCompat(CSParamPtr paramBlock);
-/*	¦ Search a volume using PBCatSearch or IndexedSearch.
+/*	Â¶ Search a volume using PBCatSearch or IndexedSearch.
 	The PBCatSearchSyncCompat function uses PBCatSearch (if available) or
 	IndexedSearch (if PBCatSearch is not available) to search a volume
 	using a set of search criteria that you specify. It builds a list of all
 	files or directories that meet your specifications.
-	
+
 	pb			input:	A CSParamPtr record specifying the volume to search
 						and the search criteria.
 				output:	Fields in the parameter block are returned indicating
@@ -92,13 +92,13 @@ pascal	OSErr	PBCatSearchSyncCompat(CSParamPtr paramBlock);
 						search ended with noErr, the CatPosition record that
 						lets you resume a search where the last search left
 						off.
-	
+
 	Note:	If you use a high-level debugger and use ioSearchTime to limit
 			the length of time to run the search, you'll want to step over
 			calls to PBCatSearchSyncCompat because it calls IndexedSearch
 			which installs a Time Manager task. Most high-level debuggers
 			don't deal gracefully with interrupt driven code.
-	
+
 	Result Codes
 		noErr				0		No error
 		nsvErr				-35		Volume not found
@@ -114,9 +114,9 @@ pascal	OSErr	PBCatSearchSyncCompat(CSParamPtr paramBlock);
 									record may be invalid
 		afpCatalogChanged	-5037	Catalog has changed and search cannot
 									be resumed
-	
+
 	__________
-	
+
 	See also:	PBCatSearch, IndexedSearch
 */
 
@@ -130,7 +130,7 @@ pascal	OSErr	NameFileSearch(ConstStr255Param volName,
 							   long *actMatchCount,
 							   Boolean newSearch,
 							   Boolean partial);
-/*	¦ Search for files by file name with PBCatSearch.
+/*	Â¶ Search for files by file name with PBCatSearch.
 	The NameFileSearch function searches for files with a specific file
 	name on a volume that supports PBCatSearch.
 	Note: A result of catChangedErr means the catalog has changed between
@@ -155,7 +155,7 @@ pascal	OSErr	NameFileSearch(ConstStr255Param volName,
 							that exactly match fileName will be found.  If the
 							partial parameter is true, then all file names that
 							contain fileName will be found.
-	
+
 	Result Codes
 		noErr				0		No error
 		nsvErr				-35		Volume not found
@@ -171,9 +171,9 @@ pascal	OSErr	NameFileSearch(ConstStr255Param volName,
 									record may be invalid
 		afpCatalogChanged	-5037	Catalog has changed and search cannot
 									be resumed
-	
+
 	__________
-	
+
 	Also see:	CreatorTypeFileSearch
 */
 
@@ -187,7 +187,7 @@ pascal	OSErr	CreatorTypeFileSearch(ConstStr255Param volName,
 									  long reqMatchCount,
 									  long *actMatchCount,
 									  Boolean newSearch);
-/*	¦ Search for files by creator/fileType with PBCatSearch.
+/*	Â¶ Search for files by creator/fileType with PBCatSearch.
 	The CreatorTypeFileSearch function searches for files with a specific
 	creator or fileType on a volume that supports PBCatSearch.
 	Note: A result of catChangedErr means the catalog has changed between
@@ -213,7 +213,7 @@ pascal	OSErr	CreatorTypeFileSearch(ConstStr255Param volName,
 							vRefNum is the same as the last call to
 							CreatorTypeFileSearch, then start searching at the
 							position where the last search left off.
-	
+
 	Result Codes
 		noErr				0		No error
 		nsvErr				-35		Volume not found
@@ -229,9 +229,9 @@ pascal	OSErr	CreatorTypeFileSearch(ConstStr255Param volName,
 									record may be invalid
 		afpCatalogChanged	-5037	Catalog has changed and search cannot
 									be resumed
-	
+
 	__________
-	
+
 	Also see:	NameFileSearch
 */
 

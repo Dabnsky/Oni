@@ -5,7 +5,7 @@
 **
 **	File:		IterateDirectory.h
 **
-**	Copyright © 1995-1999 Jim Luther and Apple Computer, Inc.
+**	Copyright Â© 1995-1999 Jim Luther and Apple Computer, Inc.
 **	All rights reserved.
 **
 **	You may incorporate this sample code into your applications without
@@ -33,17 +33,17 @@ extern "C" {
 typedef	pascal	void (*IterateFilterProcPtr) (const CInfoPBRec * const cpbPtr,
 											  Boolean *quitFlag,
 											  void *yourDataPtr);
-/*	¦ Prototype for the IterateFilterProc function IterateDirectory calls.
+/*	Â¶ Prototype for the IterateFilterProc function IterateDirectory calls.
 	This is the prototype for the IterateFilterProc function which is
 	called once for each file and directory found by IterateDirectory. The
 	IterateFilterProc gets a pointer to the CInfoPBRec that IterateDirectory
 	used to call PBGetCatInfo. The IterateFilterProc can use the read-only
 	data in the CInfoPBRec for whatever it wants.
-	
+
 	If the IterateFilterProc wants to stop IterateDirectory, it can set
 	quitFlag to true (quitFlag will be passed to the IterateFilterProc
 	false).
-	
+
 	The yourDataPtr parameter can point to whatever data structure you might
 	want to access from within the IterateFilterProc.
 
@@ -55,9 +55,9 @@ typedef	pascal	void (*IterateFilterProcPtr) (const CInfoPBRec * const cpbPtr,
 						if it wants to stop IterateDirectory.
 	yourDataPtr	input:	A pointer to whatever data structure you might
 						want to access from within the IterateFilterProc.
-	
+
 	__________
-	
+
 	Also see:	IterateDirectory, FSpIterateDirectory
 */
 
@@ -72,17 +72,17 @@ pascal	OSErr	IterateDirectory(short vRefNum,
 								 unsigned short maxLevels,
 								 IterateFilterProcPtr iterateFilter,
 								 void *yourDataPtr);
-/*	¦ Iterate (scan) through a directory's content.
+/*	Â¶ Iterate (scan) through a directory's content.
 	The IterateDirectory function performs a recursive iteration (scan) of
 	the specified directory and calls your IterateFilterProc function once
 	for each file and directory found.
-	
+
 	The maxLevels parameter lets you control how deep the recursion goes.
 	If maxLevels is 1, IterateDirectory only scans the specified directory;
 	if maxLevels is 2, IterateDirectory scans the specified directory and
 	one subdirectory below the specified directory; etc. Set maxLevels to
 	zero to scan all levels.
-	
+
 	The yourDataPtr parameter can point to whatever data structure you might
 	want to access from within the IterateFilterProc.
 
@@ -97,7 +97,7 @@ pascal	OSErr	IterateDirectory(short vRefNum,
 							IterateDirectory.
 	yourDataPtr		input:	A pointer to whatever data structure you might
 							want to access from within the IterateFilterProc.
-	
+
 	Result Codes
 		noErr				0		No error
 		nsvErr				-35		No such volume
@@ -109,9 +109,9 @@ pascal	OSErr	IterateDirectory(short vRefNum,
 									or a file was passed instead of a directory
 		afpAccessDenied		-5000	User does not have the correct access
 		afpObjectTypeErr	-5025	Directory not found or incomplete pathname
-		
+
 	__________
-	
+
 	See also:	IterateFilterProcPtr, FSpIterateDirectory
 */
 
@@ -121,17 +121,17 @@ pascal	OSErr	FSpIterateDirectory(const FSSpec *spec,
 									unsigned short maxLevels,
 									IterateFilterProcPtr iterateFilter,
 									void *yourDataPtr);
-/*	¦ Iterate (scan) through a directory's content.
+/*	Â¶ Iterate (scan) through a directory's content.
 	The FSpIterateDirectory function performs a recursive iteration (scan)
 	of the specified directory and calls your IterateFilterProc function once
 	for each file and directory found.
-	
+
 	The maxLevels parameter lets you control how deep the recursion goes.
 	If maxLevels is 1, FSpIterateDirectory only scans the specified directory;
 	if maxLevels is 2, FSpIterateDirectory scans the specified directory and
 	one subdirectory below the specified directory; etc. Set maxLevels to
 	zero to scan all levels.
-	
+
 	The yourDataPtr parameter can point to whatever data structure you might
 	want to access from within the IterateFilterProc.
 
@@ -143,7 +143,7 @@ pascal	OSErr	FSpIterateDirectory(const FSSpec *spec,
 							FSpIterateDirectory.
 	yourDataPtr		input:	A pointer to whatever data structure you might
 							want to access from within the IterateFilterProc.
-	
+
 	Result Codes
 		noErr				0		No error
 		nsvErr				-35		No such volume
@@ -154,9 +154,9 @@ pascal	OSErr	FSpIterateDirectory(const FSSpec *spec,
 		dirNFErr			-120	Directory not found or incomplete pathname
 		afpAccessDenied		-5000	User does not have the correct access
 		afpObjectTypeErr	-5025	Directory not found or incomplete pathname
-		
+
 	__________
-	
+
 	See also:	IterateFilterProcPtr, IterateDirectory
 */
 

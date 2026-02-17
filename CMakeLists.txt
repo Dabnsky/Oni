@@ -9,6 +9,16 @@ cmake_dependent_option(ONI_BINK_VIDEO "Build with Bink Video support" OFF "WIN32
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wno-incompatible-pointer-types")
+endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+	set(Platform_SDL TRUE)
+else()
+	set(Platform_SDL FALSE CACHE BOOL "Use SDL as platform layer")
+endif()
+
 include_directories(
         BungieFrameWork/BFW_Headers/
         BungieFrameWork/BFW_Source/BFW_Akira/
@@ -73,7 +83,16 @@ include_directories(
         BungieFrameWork/BFW_ToolSource/Common/Imp
         BungieFrameWork/BFW_Source/BFW_Motoko/Engines/DrawEngine/OpenGL/
 )
-if (WIN32)
+
+if (Platform_SDL)
+    find_package(OpenGL REQUIRED)
+    find_package(OpenAL REQUIRED)
+    find_package(SDL2 REQUIRED)
+    include_directories(
+        OniProj/OniGameSource/Platform_SDL/
+        BungieFrameWork/BFW_Source/BFW_SoundSystem2/Platform_OpenAL/
+    )
+elseif(WIN32)
     include_directories(
             BungieFrameWork/BFW_Source/BFW_LocalInput/Platform_Win32/
             BungieFrameWork/BFW_Source/BFW_SoundSystem/Platform_Win32/
@@ -91,16 +110,8 @@ elseif (APPLE)
     )
 endif ()
 
-set(ONI_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/Bin/")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ONI_OUTPUT_DIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ONI_OUTPUT_DIR}")
-set(CMAKE_SHARED_LIBRARY_PREFIX "")
-foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
-    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${ONI_OUTPUT_DIR})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${ONI_OUTPUT_DIR})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${ONI_OUTPUT_DIR})
-endforeach ()
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE PATH "Runtime output directory")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE PATH "Library output directory")
 
 if (ONI_BINK_VIDEO)
     add_subdirectory(OniProj/OniCMakeProjs/BinkProj/)

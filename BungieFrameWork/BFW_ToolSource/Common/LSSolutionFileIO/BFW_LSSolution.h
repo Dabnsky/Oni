@@ -1,12 +1,12 @@
 /*
 	FILE:	BFW_LSSolution.h
-	
+
 	AUTHOR:	Brent H. Pease
-	
+
 	CREATED: Jan 1, 1998
-	
-	PURPOSE: 
-	
+
+	PURPOSE:
+
 	Copyright 1998
 
 */
@@ -47,7 +47,7 @@ typedef struct LStVertex
 {
 	UUtUns32	pointIndex;
 	float		r, g, b;
-	
+
 } LStVertex;
 
 typedef struct LStFace
@@ -81,14 +81,14 @@ typedef struct LStData
 	LStPoint		*the_point_list;
 
 	M3tBoundingBox_MinMax bbox;
-	
+
 	float			contrast;
 	float			brightness;
-	
+
 	char			prepVersion[LScPrepVersion_Length];
-	
+
 	UUtUns32		flags;
-	
+
 } LStData;
 
 UUtError
@@ -105,19 +105,19 @@ UUtUns32
 LSrData_GetSize(
 	LStData*		inData);
 
-#if UUmPlatform == UUmPlatform_Win32
+#if UUmPlatform == UUmPlatform_Win32 || UUmPlatform == UUmPlatform_Linux
 
 	UUtError
 	LSrData_CreateFromLSFile(
 		const char*		inLSFilePath,
 		LStData*	*outNewData);
-	
+
 	UUtError
 	LSrPreperationFile_Create(
 		struct IMPtEnv_BuildData*	inBuildData,
 		const char*						inGQFileName,
 		const char*						inLPFilePath);
-		
+
 #endif
 
 void

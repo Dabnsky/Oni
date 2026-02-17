@@ -23,20 +23,26 @@ SS2rPlatform_SoundChannel_Initialize(
 void
 SS2rPlatform_SoundChannel_Pause(
 	SStSoundChannel				*inSoundChannel);
-	
+
 void
 SS2rPlatform_SoundChannel_Play(
 	SStSoundChannel				*inSoundChannel);
-	
+
 void
 SS2rPlatform_SoundChannel_Resume(
 	SStSoundChannel				*inSoundChannel);
-	
+
+#if UUmOpenAL
+UUtBool
+SS2rPlatform_SoundChannel_IsPlaying(
+	SStSoundChannel				*inSoundChannel);
+#endif
+
 UUtBool
 SS2rPlatform_SoundChannel_SetSoundData(
 	SStSoundChannel				*inSoundChannel,
 	SStSoundData				*inSoundData);
-	
+
 void
 SS2rPlatform_SoundChannel_SetPan(
 	SStSoundChannel				*inSoundChannel,
@@ -47,7 +53,7 @@ void
 SSiSoundChannel_SetPaused(
 	SStSoundChannel				*inSoundChannel,
 	UUtBool						inPaused);
-	
+
 void
 SS2rPlatform_SoundChannel_SetPitch(
 	SStSoundChannel				*inSoundChannel,
@@ -57,19 +63,19 @@ void
 SS2rPlatform_SoundChannel_SetVolume(
 	SStSoundChannel				*inSoundChannel,
 	float						inVolume);
-	
+
 void
 SS2rPlatform_SoundChannel_Silence(
 	SStSoundChannel				*inSoundChannel);
-	
+
 void
 SS2rPlatform_SoundChannel_Stop(
 	SStSoundChannel				*inSoundChannel);
-	
+
 void
 SS2rPlatform_SoundChannel_Terminate(
 	SStSoundChannel				*inSoundChannel);
-	
+
 // ----------------------------------------------------------------------
 UUtError
 SS2rPlatform_Initialize(
@@ -80,7 +86,7 @@ SS2rPlatform_Initialize(
 UUtError
 SS2rPlatform_InitializeThread(
 	void);
-	
+
 void
 SS2rPlatform_TerminateThread(
 	void);
@@ -114,14 +120,14 @@ SS2rPlatform_GetDebugNeeds(
 void
 SS2rPlatform_ShowDebugInfo_Overall(
 	IMtPoint2D					*inDest);
-	
+
 void
 SS2rPlatform_PerformanceStartFrame(
 	void);
-	
+
 void
 SS2rPlatform_PerformanceEndFrame(
 	void);
-	
+
 // ======================================================================
 #endif /* BFW_SS2_PLATFORM_H */

@@ -2,13 +2,13 @@
 
 /*
 	FILE:	Oni_Platform.h
-	
+
 	AUTHOR:	Brent H. Pease
-	
+
 	CREATED: April 2, 1997
-	
+
 	PURPOSE: platform header file
-	
+
 	Copyright 1997
 
 */
@@ -18,7 +18,11 @@
 
 #include "BFW_Motoko.h"
 
-#if UUmPlatform == UUmPlatform_Mac
+#if UUmSDL
+
+#include "Oni_Platform_SDL.h"
+
+#elif UUmPlatform == UUmPlatform_Mac
 
 #include "Oni_Platform_Mac.h"
 
@@ -36,14 +40,14 @@ typedef struct ONtPlatformData
 {
 	UUtAppInstance 	appInstance;
 	UUtWindow		gameWindow;
-	
+
 	#if defined(DEBUGGING) && DEBUGGING
-		
+
 		UUtWindow	akiraWindow;
 		UUtWindow	debugWindow;
-		
+
 	#endif
-	
+
 } ONtPlatformData;
 
 // data is in Oni.c
@@ -57,7 +61,7 @@ void ONrPlatform_Terminate(
 
 void ONrPlatform_Update(
 	void);
-	
+
 void ONrPlatform_ErrorHandler(
 	UUtError			theError,
 	char				*debugDescription,
@@ -67,6 +71,6 @@ void ONrPlatform_ErrorHandler(
 UUtBool
 ONrPlatform_IsForegroundApp(
 	void);
-	
+
 #endif /* ONI_PLATFORM_H */
 

@@ -10,11 +10,13 @@
 #include "BFW.h"
 #include "BFW_SoundSystem2.h"
 
-#if UUmPlatform == UUmPlatform_Mac
+#if UUmOpenAL
+	#include "BFW_SS2_Platform_OpenAL.h"
+#elif UUmPlatform == UUmPlatform_Mac
 	#include "BFW_SS2_Platform_MacOS.h"
 #elif UUmPlatform == UUmPlatform_Win32
 	#include "BFW_SS2_Platform_Win32.h"
-#elif
+#else
 	#error Platform Undefined
 #endif
 
@@ -67,12 +69,12 @@ struct SStSoundChannel
 	float							channel_volume;
 	float							distance_volume;
 	float							permutation_volume;
-	
+
 	float							pan_left;	// only used for debugging
 	float							pan_right;	// only used for debugging
-	
+
 	SStSoundChannel_PlatformData	pd;
-	
+
 };
 
 // ======================================================================
@@ -90,27 +92,27 @@ SSiSoundChannel_CanPan(
 UUtBool
 SSiSoundChannel_IsAmbient(
 	SStSoundChannel				*inSoundChannel);
-	
+
 UUtBool
 SSiSoundChannel_IsLocked(
 	SStSoundChannel				*inSoundChannel);
-	
+
 UUtBool
 SSiSoundChannel_IsLooping(
 	SStSoundChannel				*inSoundChannel);
-	
+
 UUtBool
 SSiSoundChannel_IsPaused(
 	SStSoundChannel				*inSoundChannel);
-	
+
 UUtBool
 SSiSoundChannel_IsPlaying(
 	SStSoundChannel				*inSoundChannel);
-	
+
 UUtBool
 SSiSoundChannel_IsUpdating(
 	SStSoundChannel				*inSoundChannel);
-	
+
 void
 SSiSoundChannel_SetAmbient(
 	SStSoundChannel				*inSoundChannel,
@@ -149,11 +151,11 @@ SSiSoundChannels_GetChannelByID(
 UUtUns32
 SSiSoundChannels_GetNumChannels(
 	void);
-	
+
 // ----------------------------------------------------------------------
 UUtBool
 SSiPlayingAmbient_UpdateSoundChannel(
 	SStSoundChannel				*inSoundChannel);
-	
+
 // ======================================================================
 #endif /* BFW_SS2_PRIVATE_H */

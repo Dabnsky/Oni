@@ -7,7 +7,7 @@
 **
 **	File:		Optimization.h
 **
-**	Copyright © 1992-1999 Apple Computer, Inc.
+**	Copyright Â© 1992-1999 Apple Computer, Inc.
 **	All rights reserved.
 **
 **	You may incorporate this sample code into your applications without
@@ -38,7 +38,7 @@
 **
 **	2 -- You may disable Pascal calling conventions in all MoreFiles routines
 **	except for system callbacks that require Pascal calling conventions.
-**	This will make 68K C programs both smaller and faster. 
+**	This will make 68K C programs both smaller and faster.
 **	(PowerPC compilers ignore pascal calling conventions.)
 **	Just define __WANTPASCALELIMINATION to be 1 to turn this optimization on
 **	when building MoreFiles for use from C programs (you'll need to keep
@@ -80,7 +80,7 @@
 #endif
 
 #if	__WANTPASCALELIMINATION
-	#define pascal	
+	#define pascal
 #endif
 
 
