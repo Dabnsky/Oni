@@ -44,6 +44,13 @@ typedef enum {
 } ONtControlType;
 
 typedef struct {
+    ONtInputState inputState;
+    float aimingLR;
+    float aimingUD;
+    // ...add all other fields needed for network sync...
+} ONtNetCharacterState;
+
+typedef struct {
   // ...existing fields...
   ONtControlType controlType;
   ONtNetCharacterState* netState; // NULL unless network-controlled

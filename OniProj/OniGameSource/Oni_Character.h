@@ -674,6 +674,51 @@ typedef struct ONtPainState
 
 #define ONcMaxTriggersPerCharacter 4
 
+
+typedef enum {
+  ONcControlType_Player,
+  ONcControlType_AI,
+  ONcControlType_Network
+} ONtControlType;
+
+typedef struct {
+
+	ONtInputState inputState;
+	UUtUns16 animFrame;
+	UUtUns32 physicsID; // Network-safe: physics context ID or index for PHtPhysicsContext
+
+	// animation and state control
+	UUtUns32 animationID; // Network-safe: animation ID or index for TRtAnimation
+
+	UUtUns32 actionFlags;
+	UUtUns32 weapon; // Weapon ID or type currently equipped
+	UUtBool isAiming;
+
+	// aiming information for network sync
+	float aimingLR;
+	float aimingUD;
+	M3tPoint3D aimingTarget;
+	M3tVector3D aimingVector;
+
+	UUtUns32 inAirControlID; // Network-safe: in-air control ID or index
+
+	UUtUns32 targetThrowID; // Network-safe: animation ID or index for throw for TRtAnimation
+
+	UUtUns16 throwing; // character index of who I am throwing
+
+	UUtUns16 throwTargetIndex; // Network-safe: character index of throw target for ONtCharacter
+
+	UUtUns16 fightFramesRemaining;
+
+	UUtBool validTarget; // True if character has a valid target
+
+	UUtBool pleaseFire;
+
+
+
+} ONtNetCharacterState;
+
+
 struct ONtCharacter
 {
 	ONtCharacterIndexType	index;					// index in ONgGameState->characters list
@@ -751,6 +796,11 @@ struct ONtCharacter
 	ONtActionMarker *		console_marker;
 	UUtUns32				console_aborttime;
 	ONtPainState			painState;
+
+	// network
+	ONtControlType			controlType;
+	ONtNetCharacterState *	netState;
+
 };
 
 struct ONtActiveCharacter {

@@ -3688,12 +3688,21 @@ static UUtBool ONrCharacter_IsBeingThrown(ONtActiveCharacter *ioActiveCharacter)
 void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveCharacter *ioActiveCharacter)
 {
 	UUtBool found, can_attack, restrict_movement;
-	ONtInputState input = ioActiveCharacter->inputState;
+
+	ONtInputState input;
+	// Network logic: use networked input for network-controlled characters
+    if (ioCharacter->controlType == ONcControlType_Network && ioCharacter->netState != NULL) {
+        input = ioCharacter->netState->inputState;
+    } else {
+        input = ioActiveCharacter->inputState;
+    }
+
 	TRtAnimType old_next_anim_type;
 	const TRtAnimation *old_animation;
 
 	if ((ONcChar_Player == ioCharacter->charType) && (!ONrCharacter_IsPlayingFilm(ioCharacter)) &&
-		((ioCharacter->flags & ONcCharacterFlag_AIMovement) == 0)) {
+		((ioCharacter->flags & ONcCharacterFlag_AIMovement) == 0) &&
+		(ioCharacter->controlType != ONcControlType_Network)) {
 		if (UserInputCleared()) {
 			input.buttonIsDown = 0;
 			input.buttonWentDown = 0;
@@ -3724,7 +3733,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 		ioActiveCharacter->lastAttack = ONcAnimType_None;
 	}
 
-	if (ioCharacter->flags & ONcCharacterFlag_Dead) {
+	if ((ioCharacter->flags & ONcCharacterFlag_Dead) && (ioCharacter->controlType != ONcControlType_Network)) {
 		input.buttonIsDown = 0;
 		input.buttonIsUp = 0xffffffffffffffff;
 		input.buttonWentDown = 0;
@@ -3735,7 +3744,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 		goto exit;
 	}
 
-	if (ONrCharacter_IsBeingThrown(ioActiveCharacter)) {
+	if ((ONrCharacter_IsBeingThrown(ioActiveCharacter)) && (ioCharacter->controlType != ONcControlType_Network)) {
 		input.buttonIsDown = 0;
 		input.buttonIsUp = 0xffffffffffffffff;
 		input.buttonWentDown = 0;

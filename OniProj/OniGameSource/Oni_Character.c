@@ -3803,7 +3803,7 @@ static void ONrGameState_DoCharacterFrame(
 					ONtCharacter *ioCharacter)
 {
 	const ONtAirConstants *airConstants = ONrCharacter_GetAirConstants(ioCharacter);
-	ONtActiveCharacter *active_character = ONrGetActiveCharacter(ioCharacter);
+	ONtActiveCharacter *active_character = ONrGetActiveCharacter(ioCharacter);  
 	float height;
 	TRtBody *body;
 	M3tMatrix4x3 *weapon_matrixptr = NULL;
@@ -3833,6 +3833,22 @@ static void ONrGameState_DoCharacterFrame(
 
 	} else {
 		/***************** PRELIMINARY INPUT */
+
+
+		if (ioCharacter->controlType == ONcControlType_Network && ioCharacter->netState != NULL) {
+			// Example: update from network state
+			ONtNetCharacterState *netState = ioCharacter->netState;
+
+			// Apply networked input and state
+			active_character->inputState = netState->inputState;
+			active_character->aimingLR = netState->aimingLR;
+			active_character->aimingUD = netState->aimingUD;
+			// ...apply other fields as needed...
+
+			// Optionally skip local input/AI logic for networked characters
+			// and jump to shared simulation/animation code
+			goto shared_character_update;
+		}
 
 		if (ONcChar_Player == ioCharacter->charType) {
 			ONrCharacter_VerifyExtraBody(ioCharacter, active_character);
@@ -3980,6 +3996,9 @@ static void ONrGameState_DoCharacterFrame(
 			}
 		}
 
+
+
+		shared_character_update:
 
 		/***************** PRE-MOVEMENT ANIMATION */
 
@@ -13551,9 +13570,14 @@ void ONrCharacter_UpdateInput(ONtCharacter *ioCharacter, const ONtInputState *in
 	if (active_character == NULL) {
 		return;
 	}
+    
+	if (ioCharacter->controlType == ONcControlType_Network && ioCharacter->netState != NULL) {
+        input = ioCharacter->netState->inputState;
+    } else {
+        UUmAssertReadPtr(inInput, sizeof(*inInput));
+        input = *inInput;
+    }
 
-	UUmAssertReadPtr(inInput, sizeof(*inInput));
-	input = *inInput;
 
 	active_character->inputOld = active_character->inputState.buttonIsDown;
 

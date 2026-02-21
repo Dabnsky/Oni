@@ -616,6 +616,16 @@ ONiNet_Generate_Update(
 
 	is_server = ONrNet_IsServer();
 
+	// Zero input for dead or thrown characters before serialization
+	if ((inCharacter->flags & ONcCharacterFlag_Dead) || ONrCharacter_IsBeingThrown(inCharacter)) {
+		inCharacter->netState->inputState.buttonIsDown = 0;
+		inCharacter->netState->inputState.buttonIsUp = 0xffffffffffffffff;
+		inCharacter->netState->inputState.buttonWentDown = 0;
+		inCharacter->netState->inputState.buttonWentUp = 0;
+		inCharacter->netState->inputState.turnLR = 0.f;
+		inCharacter->netState->inputState.turnUD = 0.f;
+	}
+
 	// ---------------------------------
 	// create the minimum sized update
 	// ---------------------------------
