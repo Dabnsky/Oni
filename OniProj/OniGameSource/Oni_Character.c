@@ -3803,7 +3803,8 @@ static void ONrGameState_DoCharacterFrame(
 					ONtCharacter *ioCharacter)
 {
 	const ONtAirConstants *airConstants = ONrCharacter_GetAirConstants(ioCharacter);
-	ONtActiveCharacter *active_character = ONrGetActiveCharacter(ioCharacter);  
+	ONtActiveCharacter *active_character = ONrGetActiveCharacter(ioCharacter);
+	ONtNetCharacterState *netState_character = ONrGetNetCharacterState(ioCharacter);
 	float height;
 	TRtBody *body;
 	M3tMatrix4x3 *weapon_matrixptr = NULL;
@@ -3833,22 +3834,6 @@ static void ONrGameState_DoCharacterFrame(
 
 	} else {
 		/***************** PRELIMINARY INPUT */
-
-
-		if (ioCharacter->controlType == ONcControlType_Network && ioCharacter->netState != NULL) {
-			// Example: update from network state
-			ONtNetCharacterState *netState = ioCharacter->netState;
-
-			// Apply networked input and state
-			active_character->inputState = netState->inputState;
-			active_character->aimingLR = netState->aimingLR;
-			active_character->aimingUD = netState->aimingUD;
-			// ...apply other fields as needed...
-
-			// Optionally skip local input/AI logic for networked characters
-			// and jump to shared simulation/animation code
-			goto shared_character_update;
-		}
 
 		if (ONcChar_Player == ioCharacter->charType) {
 			ONrCharacter_VerifyExtraBody(ioCharacter, active_character);
@@ -3964,6 +3949,7 @@ static void ONrGameState_DoCharacterFrame(
 
 					if (found_target) {
 						auto_aiming_distance = MUrPoint_Distance(&ioCharacter->actual_position, &target->actual_position);
+						active_character->validTarget = UUcTrue;
 					}
 				}
 				else {
@@ -13570,13 +13556,9 @@ void ONrCharacter_UpdateInput(ONtCharacter *ioCharacter, const ONtInputState *in
 	if (active_character == NULL) {
 		return;
 	}
-    
-	if (ioCharacter->controlType == ONcControlType_Network && ioCharacter->netState != NULL) {
-        input = ioCharacter->netState->inputState;
-    } else {
-        UUmAssertReadPtr(inInput, sizeof(*inInput));
-        input = *inInput;
-    }
+
+	UUmAssertReadPtr(inInput, sizeof(*inInput));
+	input = *inInput;
 
 
 	active_character->inputOld = active_character->inputState.buttonIsDown;
@@ -16133,6 +16115,141 @@ ONtActiveCharacter *ONrGetActiveCharacter(const ONtCharacter *inCharacter)
 		return ONgGameState->activeCharacterStorage + active_index;
 	}
 }
+
+ONtNetCharacterState *ONrSetNetCharacterState(const ONtCharacter *inCharacter)
+{
+	UUmAssertReadPtr(inCharacter, sizeof(*inCharacter));
+	ONtNetCharacterState *net_character_state = NULL;
+	ONtActiveCharacter *active_character = ONrGetActiveCharacter(inCharacter);
+
+	if (inCharacter->active_index == ONcCharacterIndex_None) {
+		return NULL;
+	} else {
+		ONtCharacterIndexType active_index = ONrCharacter_GetActiveIndex((ONtCharacter *) inCharacter);
+		UUmAssert((active_index >= 0) && (active_index < ONgGameState->usedActiveCharacters));
+		net_character_state->actionFlags = inCharacter->actionFlags;
+		net_character_state->aimingLR = active_character->aimingLR;
+		net_character_state->aimingUD = active_character->aimingUD;
+		net_character_state->aimingTarget = active_character->aimingTarget;
+		net_character_state->aimingVector = active_character->aimingVector;
+		net_character_state->animFrame = active_character->animFrame;
+		UUrString_Copy(net_character_state->animName, active_character->animation ? TMrInstance_GetInstanceName(active_character->animation) : NULL, ONcMaxInstNameLength);
+		net_character_state->character_index = inCharacter->index;
+		net_character_state->desiredFacing = inCharacter->desiredFacing;
+		net_character_state->facing = inCharacter->facing;
+		net_character_state->fightFramesRemaining = active_character->fightFramesRemaining;
+		net_character_state->inAirFlags    = active_character->inAirControl.flags;
+		net_character_state->inAirVelocity = active_character->inAirControl.velocity;
+		net_character_state->isAiming = active_character->isAiming;
+		net_character_state->numFramesInAir = active_character->inAirControl.numFramesInAir;
+		net_character_state->position = inCharacter->location;
+		net_character_state->teamNumber = inCharacter->teamNumber;
+		net_character_state->hitPoints = inCharacter->hitPoints;
+		net_character_state->maxHitPoints = inCharacter->maxHitPoints;
+		UUrString_Copy(net_character_state->player_name, inCharacter->player_name, ONcMaxPlayerNameLength);
+		net_character_state->scale = inCharacter->scale;
+		net_character_state->scriptID = inCharacter->scriptID;
+		net_character_state->inputState = active_character->inputState;
+		net_character_state->last_forward_tap = active_character->last_forward_tap;
+		net_character_state->frozen = active_character->frozen;
+		net_character_state->cameraVector = active_character->cameraVector;
+		net_character_state->thrownBy = active_character->thrownBy;
+
+		// figure out a function to use that looks up the oni character object based on the active_character->throwTarget
+		net_character_state->throwTargetName = active_character->throwTarget;
+
+		// figure out how to look up the animation name and frame based on active_character->targetThrow
+		net_character_state->targetThrowAnimName = active_character->targetThrow;
+		net_character_state->targetThrowAnimFrame = active_character->targetThrow;
+		
+
+		// figure out how to correctly use the aimingScreen information that is safe for netrwork.
+		net_character_state->aimingScreen = active_character->aimingScreen;
+		net_character_state->oldAimingScreenTime = active_character->oldAimingScreenTime;
+		
+		// figure out how to look up oldAimingScreen with TRtAimingScreen lookup functions if there are
+		net_character_state->oldAimingScreen = active_character->oldAimingScreen;
+		
+		// figure out how to use any existing lookup functions for M3tQuaternion
+		net_character_state->curAnimOrientations = active_character->curAnimOrientations;
+		net_character_state->curOrientations = active_character->curOrientations;
+
+		if (active_character->throwing) {
+			net_character_state->throwFrame = active_character->animFrame;
+			UUrString_Copy(net_character_state->throwName, TMrInstance_GetInstanceName(active_character->animFrame), ONcMaxInstNameLength);
+			net_character_state->throwing = UUcTrue;
+
+		}
+
+		net_character_state->validTarget = active_character->validTarget;
+		net_character_state->weapon = inCharacter->inventory.weapons[0];
+
+	}
+}
+
+
+ONtNetCharacterState *ONrGetNetCharacterState(ONtCharacter *inCharacter)
+{
+	UUmAssertReadPtr(inCharacter, sizeof(*inCharacter));
+	ONtNetCharacterState *net_character_state = NULL;
+	ONtActiveCharacter *active_character = ONrGetActiveCharacter(inCharacter);
+
+	if (inCharacter->active_index == ONcCharacterIndex_None) {
+		return NULL;
+	} else {
+		ONtCharacterIndexType active_index = ONrCharacter_GetActiveIndex((ONtCharacter *) inCharacter);
+		UUmAssert((active_index >= 0) && (active_index < ONgGameState->usedActiveCharacters));
+		inCharacter->actionFlags = net_character_state->actionFlags;
+		active_character->aimingLR = net_character_state->aimingLR;
+		active_character->aimingUD = net_character_state->aimingUD;
+		active_character->aimingTarget = net_character_state->aimingTarget;
+		active_character->aimingVector = net_character_state->aimingVector;
+		active_character->animFrame = net_character_state->animFrame;
+		UUrString_Copy(active_character->animFrame, net_character_state->animName, ONcMaxInstNameLength);
+		inCharacter->index = net_character_state->character_index;
+		inCharacter->desiredFacing = net_character_state->desiredFacing;
+		inCharacter->facing = net_character_state->facing;
+		active_character->fightFramesRemaining = net_character_state->fightFramesRemaining;
+		active_character->inAirControl.flags    = net_character_state->inAirFlags;
+		active_character->inAirControl.velocity = net_character_state->inAirVelocity;
+		active_character->isAiming = net_character_state->isAiming;
+		active_character->inAirControl.numFramesInAir = net_character_state->numFramesInAir;
+		inCharacter->location = net_character_state->position;
+		inCharacter->teamNumber = net_character_state->teamNumber;
+		inCharacter->hitPoints = net_character_state->hitPoints;
+		inCharacter->maxHitPoints = net_character_state->maxHitPoints;
+		UUrString_Copy(inCharacter->player_name, net_character_state->player_name, ONcMaxPlayerNameLength);
+		inCharacter->scale = net_character_state->scale;
+		inCharacter->scriptID = net_character_state->scriptID;
+		active_character->inputState = net_character_state->inputState;
+		active_character->last_forward_tap = net_character_state->last_forward_tap;
+		active_character->frozen = net_character_state->frozen;
+		active_character->cameraVector = net_character_state->cameraVector;
+		active_character->thrownBy = net_character_state->thrownBy;
+
+		// figure out a function to use that looks up the oni character object based on the active_character->throwTarget
+		net_character_state->throwTargetName = active_character->throwTarget;
+
+		// figure out how to look up the animation name and frame based on active_character->targetThrow
+		active_character->targetThrow = net_character_state->targetThrowAnimName;
+		active_character->targetThrow = net_character_state->targetThrowAnimFrame;
+
+		active_character->aimingScreen = net_character_state->aimingScreen;
+		active_character->oldAimingScreenTime = net_character_state->oldAimingScreenTime;
+		active_character->oldAimingScreen = net_character_state->oldAimingScreen;
+		active_character->curAnimOrientations = net_character_state->curAnimOrientations;
+		active_character->curOrientations = net_character_state->curOrientations;
+		active_character->throwing = net_character_state->throwing;
+		if (active_character->throwing) {
+			active_character->animFrame = net_character_state->throwFrame;
+			UUrString_Copy(active_character->animFrame, TMrInstance_GetInstanceName(net_character_state->throwName), ONcMaxInstNameLength);
+		}
+		active_character->validTarget = net_character_state->validTarget;
+		inCharacter->inventory.weapons[0] = net_character_state->weapon;
+
+	}
+}
+
 
 ONtActiveCharacter *ONrForceActiveCharacter(ONtCharacter *inCharacter)
 {

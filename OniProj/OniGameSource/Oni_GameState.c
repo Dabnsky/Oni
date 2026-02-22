@@ -3690,12 +3690,7 @@ void ONrCharacter_HandleHeartbeatInput(ONtCharacter *ioCharacter, ONtActiveChara
 	UUtBool found, can_attack, restrict_movement;
 
 	ONtInputState input;
-	// Network logic: use networked input for network-controlled characters
-    if (ioCharacter->controlType == ONcControlType_Network && ioCharacter->netState != NULL) {
-        input = ioCharacter->netState->inputState;
-    } else {
-        input = ioActiveCharacter->inputState;
-    }
+	input = ioActiveCharacter->inputState;
 
 	TRtAnimType old_next_anim_type;
 	const TRtAnimation *old_animation;

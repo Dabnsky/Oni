@@ -15,6 +15,8 @@
 #ifndef __ONI_CHARACTER_H__
 #define __ONI_CHARACTER_H__
 
+#define ONcMaxInstNameLength 32
+
 #include "BFW.h"
 #include "BFW_Totoro.h"
 #include "BFW_Motoko.h"
@@ -682,38 +684,74 @@ typedef enum {
 } ONtControlType;
 
 typedef struct {
-
-	ONtInputState inputState;
+	UUtUns16 character_index;
 	UUtUns16 animFrame;
-	UUtUns32 physicsID; // Network-safe: physics context ID or index for PHtPhysicsContext
+	M3tPoint3D position;
+	char animName[ONcMaxInstNameLength];
+	LItButtonBits buttonIsDown;
 
-	// animation and state control
-	UUtUns32 animationID; // Network-safe: animation ID or index for TRtAnimation
-
-	UUtUns32 actionFlags;
-	UUtUns32 weapon; // Weapon ID or type currently equipped
-	UUtBool isAiming;
-
-	// aiming information for network sync
+	// aiming
 	float aimingLR;
 	float aimingUD;
 	M3tPoint3D aimingTarget;
 	M3tVector3D aimingVector;
 
-	UUtUns32 inAirControlID; // Network-safe: in-air control ID or index
+	// facing
+	float facing;
+	float desiredFacing;
 
-	UUtUns32 targetThrowID; // Network-safe: animation ID or index for throw for TRtAnimation
+	// action flags
+	UUtUns32 actionFlags;
 
-	UUtUns16 throwing; // character index of who I am throwing
-
-	UUtUns16 throwTargetIndex; // Network-safe: character index of throw target for ONtCharacter
-
+	UUtUns32 weapon;
+	UUtBool isAiming;
+	UUtBool validTarget;
 	UUtUns16 fightFramesRemaining;
 
-	UUtBool validTarget; // True if character has a valid target
+	// Throw state
+	UUtUns16 throwing;
+	UUtUns16 throwFrame;
+	char throwName[ONcMaxInstNameLength];
 
-	UUtBool pleaseFire;
+	// in-air control
+	UUtUns16 numFramesInAir;
+	UUtUns16 inAirFlags;
+	M3tVector3D inAirVelocity;
 
+
+	UUtUns16 teamNumber;
+
+	UUtUns32 hitPoints;
+	UUtUns32 maxHitPoints;
+
+	char player_name[ONcMaxPlayerNameLength];
+
+	float scale;
+
+	UUtUns16 scriptID;
+
+	ONtInputState inputState;
+	UUtUns32 last_forward_tap;
+
+	UUtBool frozen;
+	M3tVector3D cameraVector;
+
+	UUtUns16 thrownBy;
+
+	// throwTarget and animations need to be looked up to keep it network serializable.
+	ONtCharacter throwTargetName;
+	TRtAnimation targetThrowAnimName;
+	TRtAnimation targetThrowAnimFrame;
+
+	// see if we can look up an ID or name for the aiming screen
+	TRtAimingScreen aimingScreen;
+	
+
+	UUtUns32 oldAimingScreenTime;
+	TRtAimingScreen oldAimingScreen;
+
+	M3tQuaternion curAnimOrientations;	
+	M3tQuaternion curOrientations;
 
 
 } ONtNetCharacterState;
@@ -797,9 +835,10 @@ struct ONtCharacter
 	UUtUns32				console_aborttime;
 	ONtPainState			painState;
 
-	// network
+	// is local or networK
 	ONtControlType			controlType;
-	ONtNetCharacterState *	netState;
+	// action flags
+	UUtUns32 actionFlags;
 
 };
 
@@ -943,6 +982,7 @@ struct ONtActiveCharacter {
 	float					autoAimAdjustmentUD;
 	UUtBool					oldExactAiming;
 	UUtUns32				oldExactAimingTime;
+	UUtBool 				validTarget;
 
 	// action flags
 	UUtBool					pleaseJump;
