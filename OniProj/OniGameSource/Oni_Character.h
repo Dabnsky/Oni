@@ -703,7 +703,6 @@ typedef struct {
 	// action flags
 	UUtUns32 actionFlags;
 
-	UUtUns32 weapon;
 	UUtBool isAiming;
 	UUtBool validTarget;
 	UUtUns16 fightFramesRemaining;

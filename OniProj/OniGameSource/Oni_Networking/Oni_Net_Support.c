@@ -2217,7 +2217,7 @@ ONiNet_Process_Weapon_Update(
 				if (swap_it)
 				{
 					UUtUns16	x;
-					for (x=0; x < WPcMaxBarrels; x++)
+					for (x=0; x < sizeof(ammo_group.ammo) / sizeof(ammo_group.ammo[0]); x++)	
 					{
 						UUrSwap_2Byte(&ammo_group.ammo[x]);
 					}

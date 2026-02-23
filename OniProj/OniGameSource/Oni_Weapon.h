@@ -40,6 +40,18 @@
 
 typedef struct WPtWeapon WPtWeapon;
 
+// Speculative definition for WPtAmmoGroup
+typedef struct WPtAmmoGroup {
+	int ammo[2];           // [0]=ballistic, [1]=energy (or more types as needed)
+	int type;              // Ammo type identifier (e.g., ballistic, energy)
+	int magazine;          // Current ammo in magazine
+	int reserve;           // Reserve ammo for reloads
+	int max_magazine;      // Max magazine size
+	int max_reserve;       // Max reserve ammo
+	unsigned int last_update_time; // Timestamp or frame for last update
+	int reload_state;      // 0=not reloading, 1=reloading
+} WPtAmmoGroup;
+
 typedef enum WPtWeaponClassFlags
 {
 	WPcWeaponClassFlag_None					= 0x00000000,

@@ -16182,8 +16182,11 @@ ONtNetCharacterState *ONrSetNetCharacterState(const ONtCharacter *inCharacter)
 		}
 
 		net_character_state->validTarget = active_character->validTarget;
-		net_character_state->weapon = inCharacter->inventory.weapons[0];
 
+		WPtWeapon *stowed_weapon = WPrSlot_FindLastStowed(&ioCharacter->inventory, WPcPrimarySlot, NULL);
+		if (stowed_weapon != NULL) {
+			net_character_state->weapon = stowed_weapon;
+		}
 	}
 }
 
@@ -16245,8 +16248,10 @@ ONtNetCharacterState *ONrGetNetCharacterState(ONtCharacter *inCharacter)
 			UUrString_Copy(active_character->animFrame, TMrInstance_GetInstanceName(net_character_state->throwName), ONcMaxInstNameLength);
 		}
 		active_character->validTarget = net_character_state->validTarget;
-		inCharacter->inventory.weapons[0] = net_character_state->weapon;
 
+		if (net_character_state->weapon != NULL){
+			inCharacter->inventory.weapons[0] = net_character_state->weapon;
+		}
 	}
 }
 
